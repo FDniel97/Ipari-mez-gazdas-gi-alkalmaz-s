@@ -34,6 +34,18 @@ public class ComplexArea {
 
     }
 
+    public int getNumOfUnitAres(){
+
+        return genericUnitAreas.size();
+    }
+
+    public double size(){
+
+        // TODO...
+
+        return 0.0;
+    }
+
     public void validateUnitAreas(List<GenArea> genericUnitAreas) throws Exception{
 
         // TODO...

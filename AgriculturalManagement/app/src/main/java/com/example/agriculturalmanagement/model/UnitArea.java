@@ -4,6 +4,12 @@ import java.lang.String;
 
 public class UnitArea implements GenArea{
 
+    private static double longitudeLength;
+    private static double latitudeLength;
+
+    private double locationLongitude;
+    private double locationLatitude;
+
     public UnitArea(){
 
         // TODO...
@@ -14,8 +20,17 @@ public class UnitArea implements GenArea{
         // TODO...
     }
 
+    public double getLongitude(){
+
+        return locationLongitude;
+    }
+
+    public double getLatitude(){
+
+        return locationLatitude;
+    }
     @Override
-    public double Size() {
+    public double size() {
 
         // TODO...
 
@@ -23,7 +38,7 @@ public class UnitArea implements GenArea{
     }
 
     @Override
-    public void ComputeUnitArea() {
+    public void computeUnitArea() {
 
         // TODO...
     }

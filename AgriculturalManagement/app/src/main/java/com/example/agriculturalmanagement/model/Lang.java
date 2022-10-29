@@ -20,8 +20,8 @@ public class Lang {
         // TODO...
     }
 
-    public String Get(String key_label){
+    public String get(String keyLabel){
 
-        return fieldLabels.containsKey(key_label) ? fieldLabels.get(key_label) : "NullField";
+        return fieldLabels.containsKey(keyLabel) ? fieldLabels.get(keyLabel) : "NullField";
     }
 }

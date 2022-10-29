@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.lang.Exception;
+import java.util.Map;
 
 public class Field{
 
@@ -20,7 +21,7 @@ public class Field{
     private double area;
     private Duration workHours;
     private int precipitationQuantity;
-    private List<CalendarEvent> events;
+    private Map<String, CalendarEvent> events;
     private Crop cropType;
     private double overcastIndex;
     private double lightExposure;// intensity related light exposure, computing from historical overcastIndex
@@ -28,7 +29,7 @@ public class Field{
     private double locationLongitude;
     private double locationLatitude;
     private Address physicalAddress;
-    private GenArea physicalForm;
+    private ComplexArea physicalForm;
 
     public Field(){
 
@@ -52,9 +53,9 @@ public class Field{
     * @param[in] physicalForm Estimated geometric representation of field
     */
     public Field(String name, double area, Duration workHours, int precipitationQuantity,
-                 List<CalendarEvent> events, Crop cropType, double overcastIndex, double lightExposure,
+                 Map<String, CalendarEvent> events, Crop cropType, double overcastIndex, double lightExposure,
                  LocalDateTime created, double locationLongitude, double locationLatitude,
-                 Address physicalAddress, GenArea physicalForm) throws Exception {
+                 Address physicalAddress, ComplexArea physicalForm) throws Exception {
 
         id = -1;// has not been used, new entity
 
@@ -89,7 +90,7 @@ public class Field{
         if(physicalForm != null){
 
             // validation of physicalFrom is before passing to Field constructor
-            if(physicalForm.Size() > 0.0) this.physicalForm = physicalForm;
+            if(physicalForm.size() > 0.0) this.physicalForm = physicalForm;
             else throw new Exception("Area of field is zero.");
         }
         else{
@@ -116,9 +117,9 @@ public class Field{
      * @param[in] physicalForm estimated geometric representation of field
      */
     public Field(int id, String name, double area, Duration workHours, int precipitationQuantity,
-                 List<CalendarEvent> events, Crop cropType, double overcastIndex, double lightExposure,
+                 Map<String, CalendarEvent> events, Crop cropType, double overcastIndex, double lightExposure,
                  LocalDateTime created, double locationLongitude, double locationLatitude,
-                 Address physicalAddress, GenArea physicalForm) throws Exception {
+                 Address physicalAddress, ComplexArea physicalForm) throws Exception {
 
         // assumption of consistent database (skipping data condition tests)
         this.id = id;
@@ -169,7 +170,14 @@ public class Field{
         return precipitationQuantity;
     }
 
-    public List<CalendarEvent> getEvents() {
+    public CalendarEvent getEvent(String eventName) throws Exception{
+
+        if(events.containsKey(eventName)) return events.get(eventName);
+
+        throw new Exception("Event not found with provided event name.");
+    }
+
+    public Map<String, CalendarEvent> getEvents() {
 
         return events;
     }
@@ -209,7 +217,7 @@ public class Field{
         return physicalAddress;
     }
 
-    public GenArea getPhysicalForm() {
+    public ComplexArea getPhysicalForm() {
 
         return physicalForm;
     }
@@ -254,12 +262,12 @@ public class Field{
     *          into the list.
     * @param[in] new_event Event to be added into the event list
     */
-    public void setEvent(CalendarEvent new_event) throws Exception{
+    public void setEvent(CalendarEvent newEvent) throws Exception{
 
-        if(new_event != null){
+        if(newEvent != null){
 
             // no further handling is needed, internal conditions were handled in type
-            if(LocalDateTime.now().isBefore(new_event.getTimestamp())) this.events.add(new_event);
+            if(LocalDateTime.now().isBefore(newEvent.getTimestamp())) this.events.put(newEvent.getName(), newEvent);
             else throw new Exception("CalendarEvent was before current time.");
         }
         else{
@@ -305,11 +313,11 @@ public class Field{
         else throw new Exception("Physical address is null.");
     }
 
-    public void setPhysicalForm(GenArea physicalForm) throws Exception{
+    public void setPhysicalForm(ComplexArea physicalForm) throws Exception{
 
         if(physicalForm != null){
 
-            if(physicalForm.Size() > 0.0) this.physicalForm = physicalForm;
+            if(physicalForm.size() > 0.0) this.physicalForm = physicalForm;
             else throw new Exception("Area of field is zero.");
         }
         else{
@@ -326,13 +334,13 @@ public class Field{
         return false;
     }
 
-    public static Field Search(Field field_params) throws Exception{
+    public static Field search(Field fieldParams) throws Exception{
 
-        Field field_result = new Field();
+        Field fieldResult = new Field();
 
         // TODO...
         // iteration on database elements AND using precache buffer...
 
-        return field_result;
+        return fieldResult;
     }
 }

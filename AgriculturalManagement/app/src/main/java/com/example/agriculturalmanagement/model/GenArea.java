@@ -6,6 +6,6 @@ public interface GenArea extends Serializable {
 
     // TODO...
 
-    public double Size();
-    public void ComputeUnitArea();
+    public double size();
+    public void computeUnitArea();
 }

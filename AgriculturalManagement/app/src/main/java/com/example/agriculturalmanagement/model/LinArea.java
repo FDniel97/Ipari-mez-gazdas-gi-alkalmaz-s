@@ -1,8 +1,15 @@
 package com.example.agriculturalmanagement.model;
 
 import java.lang.String;
+import java.util.Dictionary;
+import java.util.List;
 
 public class LinArea implements GenArea{
+
+    private Dictionary<Double, Double> coords;
+    private double locationLongitude;
+    private double locationLatitude;
+
 
     public LinArea(){
 
@@ -14,18 +21,38 @@ public class LinArea implements GenArea{
         // TODO...
     }
 
+    public double getLongitude(){
+
+        return locationLongitude;
+    }
+
+    public double getLocationLatitude(){
+
+        return locationLatitude;
+    }
+
     @Override
-    public double Size() {
+    public void computeUnitArea() {
+
+        // TODO...
+    }
+
+    public boolean checkLoop(){
+
+        return true;
+    }
+
+    public void addCorrd(){
+
+        // TODO...
+    }
+
+    @Override
+    public double size() {
 
         // TODO...
 
         return 0;
-    }
-
-    @Override
-    public void ComputeUnitArea() {
-
-        // TODO...
     }
 
     @Override
