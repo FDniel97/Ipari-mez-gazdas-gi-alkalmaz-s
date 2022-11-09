@@ -2,9 +2,8 @@ package com.example.agriculturalmanagement.model;
 
 import java.lang.String;
 import java.lang.Exception;
-import java.util.concurrent.ExecutionException;
 
-public class Address {
+public class PhysicalAddress {
 
     private int zipCode;
     private String country;
@@ -15,21 +14,35 @@ public class Address {
     private String number;
     private String parcelNumber;
 
-    public Address(){
+    public PhysicalAddress() throws Exception{
 
-        // TODO...
+        zipCode = 0;
+        country = "";
+        municipality = "";
+        city = "";
+        district = "";
+        street = "";
+        number = "";
+        parcelNumber = "";
     }
 
-    public Address(int zipCode, String country, String municipality, String city, String district,
-                   String street, String number, String parcelNumber) throws Exception {
+    public PhysicalAddress(int zipCode, String country, String municipality, String city, String district,
+                           String street, String number, String parcelNumber) throws Exception {
 
         setZipCode(zipCode);
+
         setCountry(country);
+
         setMunicipality(municipality);
+
         setCity(city);
+
         setDistrict(district);
+
         setStreet(street);
+
         setNumber(number, parcelNumber);
+
         setParcelNumber(parcelNumber);
     }
 
