@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.lang.Exception;
@@ -18,7 +20,6 @@ public class Field{
 
     private int id;// consistency if preserved and maintained by database (avoidance of id redundancy)
     private String name;
-    private double area;
     private Duration workHours;
     private int precipitationQuantity;
     private Map<String, CalendarEvent> events;
@@ -28,12 +29,24 @@ public class Field{
     private LocalDateTime created;
     private double locationLongitude;
     private double locationLatitude;
-    private Address physicalAddress;
+    private PhysicalAddress physicalAddress;
     private ComplexArea physicalForm;
 
-    public Field(){
+    public Field() throws Exception{
 
-        // TODO...
+        id = 0;
+        name = "";
+        workHours = Duration.ZERO;
+        precipitationQuantity = 0;
+        events = new HashMap<String, CalendarEvent>();
+        cropType = cropType.ZERO;
+        overcastIndex = 0.0;
+        lightExposure = 1.0;
+        created = LocalDateTime.now();
+        locationLongitude = 0.0;
+        locationLatitude = 0.0;
+        physicalAddress = new PhysicalAddress();
+        physicalForm = new ComplexArea();
     }
 
     /* !@brief Constructor for existing entity creation, getting from database.
@@ -52,33 +65,28 @@ public class Field{
     * @param[in] physicalAddress Postal address including parcel address
     * @param[in] physicalForm Estimated geometric representation of field
     */
-    public Field(String name, double area, Duration workHours, int precipitationQuantity,
+    public Field(String name, ComplexArea area, Duration workHours, int precipitationQuantity,
                  Map<String, CalendarEvent> events, Crop cropType, double overcastIndex, double lightExposure,
                  LocalDateTime created, double locationLongitude, double locationLatitude,
-                 Address physicalAddress, ComplexArea physicalForm) throws Exception {
+                 PhysicalAddress physicalAddress, ComplexArea physicalForm) throws Exception {
 
         id = -1;// has not been used, new entity
 
-        if(area > 0.0) this.area = area;
-        else throw new Exception("Field area is zero.");
+        setName(name);
 
-        if(workHours != null) this.workHours = workHours;
-        else throw new Exception("Work hours is null.");
+        setArea(area);
 
-        if(precipitationQuantity >= 0) this.precipitationQuantity = precipitationQuantity;
-        else throw new Exception("Precipitation quantity if zero.");
+        setWorkHours(workHours);
 
-        if(events.size() > 0) this.events = events;
-        else throw new Exception("Event list is empty.");
+        setPrecipitationQuantity(precipitationQuantity);
 
-        if(cropType != null) this.cropType = cropType;
-        else throw new Exception("Crop type is null.");
+        setEvents(events);
 
-        if(overcastIndex < 1 && overcastIndex > 0) this.overcastIndex = overcastIndex;
-        else throw new Exception("Overcast index is out of bounds.");
+        setCropType(cropType);
 
-        if(lightExposure < 1 && lightExposure > 0) this.lightExposure = lightExposure;
-        else throw new Exception("Light exposure index is out of bounds.");
+        setOvercastIndex(overcastIndex);
+
+        setLightExposure(lightExposure);
 
         if(created != null) this.created = created;
         else throw new Exception("Date of creation is null.");
@@ -87,16 +95,7 @@ public class Field{
 
         setPhysicalAddress(physicalAddress);
 
-        if(physicalForm != null){
-
-            // validation of physicalFrom is before passing to Field constructor
-            if(physicalForm.size() > 0.0) this.physicalForm = physicalForm;
-            else throw new Exception("Area of field is zero.");
-        }
-        else{
-
-            throw new Exception("Area of field is null.");
-        }
+        setPhysicalForm(physicalForm);
     }
 
     /* !@brief Constructor for existing entity creation, getting from database.
@@ -116,15 +115,14 @@ public class Field{
      * @param[in] physicalAddress Postal address including parcel address
      * @param[in] physicalForm estimated geometric representation of field
      */
-    public Field(int id, String name, double area, Duration workHours, int precipitationQuantity,
+    public Field(int id, String name, Duration workHours, int precipitationQuantity,
                  Map<String, CalendarEvent> events, Crop cropType, double overcastIndex, double lightExposure,
                  LocalDateTime created, double locationLongitude, double locationLatitude,
-                 Address physicalAddress, ComplexArea physicalForm) throws Exception {
+                 PhysicalAddress physicalAddress, ComplexArea physicalForm) throws Exception {
 
         // assumption of consistent database (skipping data condition tests)
         this.id = id;
         this.name = name;
-        this.area = area;
         this.workHours = workHours;
         this.precipitationQuantity = precipitationQuantity;
         this.events = events;
@@ -157,7 +155,7 @@ public class Field{
 
     public double getArea() {
 
-        return area;
+        return physicalForm.size();
     }
 
     public Duration getWorkHours() {
@@ -212,7 +210,7 @@ public class Field{
         return locationLatitude;
     }
 
-    public Address getPhysicalAddress() {
+    public PhysicalAddress getPhysicalAddress() {
 
         return physicalAddress;
     }
@@ -230,12 +228,15 @@ public class Field{
         else this.name = new_name;
     }
 
-    public void setArea(GenArea new_area_chunk) {
+    public void setArea(ComplexArea new_area) throws Exception{
 
         // concatenating new area chunk with existing ones
         //  including overlapping and disjunction error handling
 
         // TODO...
+
+        if(new_area.size() > 0.0) this.physicalForm = new_area;
+        else throw new Exception("Field area is zero.");
     }
 
     /* !@brief Setter that updates work hours strictly in increasing tendency, decrease can not be occurred
@@ -243,6 +244,9 @@ public class Field{
     * @param[in] workHours Number of work hours to add to the recent hours
     */
     public void setWorkHours(Duration workHours) throws Exception{
+
+
+        if(workHours == null) throw new Exception("Work hours is null.");
 
         if(workHours.compareTo(Duration.ZERO) > 0) this.workHours.plus(workHours);
         else throw new Exception("Number of additional hours are zero.");
@@ -260,7 +264,7 @@ public class Field{
 
     /*! @brief Setter that inserts a new event into the event list. Only future events can be placed
     *          into the list.
-    * @param[in] new_event Event to be added into the event list
+    * @param[in] newEvent Event to be added into the event list
     */
     public void setEvent(CalendarEvent newEvent) throws Exception{
 
@@ -273,6 +277,23 @@ public class Field{
         else{
 
             throw new Exception("CalendarEvent is null.");
+        }
+    }
+
+    /* !@brief Setter that inserts multiple new events into event list. Only future events can be placed
+    *          into the list.
+    *
+    * @param[i] newEvents Events to be added to the event list
+    * */
+    public void setEvents(Map<String, CalendarEvent> newEvents) throws Exception{
+
+        if(events.isEmpty()) throw new Exception("Event list is empty.");
+
+        int sizeOfNewEvents = newEvents.size();
+
+        for(int i = 0; i < sizeOfNewEvents; ++i){
+
+            setEvent(newEvents.get(i));
         }
     }
 
@@ -307,7 +328,7 @@ public class Field{
         else throw new Exception("Location latitude is out of bounds.");
     }
 
-    public void setPhysicalAddress(Address physicalAddress) throws Exception{
+    public void setPhysicalAddress(PhysicalAddress physicalAddress) throws Exception{
 
         if(physicalAddress != null) this.physicalAddress = physicalAddress;
         else throw new Exception("Physical address is null.");
@@ -317,6 +338,7 @@ public class Field{
 
         if(physicalForm != null){
 
+            // validation of physicalFrom is before passing to Field constructor
             if(physicalForm.size() > 0.0) this.physicalForm = physicalForm;
             else throw new Exception("Area of field is zero.");
         }

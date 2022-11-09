@@ -7,15 +7,22 @@ import kotlinx.coroutines.ExecutorCoroutineDispatcher;
 
 public class Crop {
 
+    public final Crop ZERO = new Crop("", "", 0, 0);
+
+
     private int id;// id for database entity
     private String name;
     private String description;
     private double quantity;
     private int price;
 
-    public Crop(){
 
-        // TODO...
+    public Crop() throws Exception {
+
+        name = "";
+        description = "";
+        quantity = 0.0;
+        price = 0;
     }
 
     /* !@brief Constructor that takes the necessary parameters in order to create crop type
@@ -47,20 +54,24 @@ public class Crop {
         return id;
     }
 
+
     public String getName() {
 
         return name;
     }
+
 
     public String getDescription() {
 
         return description;
     }
 
+
     public double getQuantity() {
 
         return quantity;
     }
+
 
     public int getPrice() {
 
@@ -69,12 +80,12 @@ public class Crop {
 
     // SETTER METHODS FOR MEMBERS
 
-
     public void setName(String name) throws Exception{
 
         if(name.isEmpty()) throw new Exception("Name of crop is empty.");
         else this.name = name;
     }
+
 
     public void setDescription(String description) throws Exception{
 
@@ -82,11 +93,13 @@ public class Crop {
         else this.description = description;
     }
 
+
     public void setQuantity(double quantity) throws Exception{
 
         if(quantity < 0.0) throw new Exception("Quantity is negative.");
         else this.quantity = quantity;
     }
+
 
     public void setPrice(int price) throws Exception{
 
