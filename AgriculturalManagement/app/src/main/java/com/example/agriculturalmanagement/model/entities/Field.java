@@ -20,20 +20,6 @@ public class Field{
     private double locationLatitude;
     private PhysicalAddress physicalAddress;
 
-    public Field() throws Exception{
-
-        id = 0;
-        name = "";
-        workHours = Duration.ZERO;
-        precipitationQuantity = 0;
-        overcastIndex = 0.0;
-        lightExposure = 1.0;
-        created = LocalDateTime.now();
-        locationLongitude = 0.0;
-        locationLatitude = 0.0;
-        physicalAddress = new PhysicalAddress();
-    }
-
     /* !@brief Constructor for existing entity creation, getting from database.
     *
     * @param[in] name Name of field

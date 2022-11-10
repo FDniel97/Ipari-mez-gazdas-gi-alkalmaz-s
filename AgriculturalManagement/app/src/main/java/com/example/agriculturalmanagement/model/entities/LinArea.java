@@ -9,12 +9,6 @@ public class LinArea implements GenArea{
     private double locationLongitude;
     private double locationLatitude;
 
-
-    public LinArea(){
-
-        // TODO...
-    }
-
     public LinArea(String rawData){
 
         // TODO...

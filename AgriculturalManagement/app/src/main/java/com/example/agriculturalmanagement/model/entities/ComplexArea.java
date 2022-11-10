@@ -8,11 +8,6 @@ public class ComplexArea {
 
     private List<GenArea> genericUnitAreas;// heterogeneous container with a super type
 
-    public ComplexArea(){
-
-        // TODO...
-    }
-
     public ComplexArea(List<GenArea> genericUnitAreas) throws Exception{
 
         if(genericUnitAreas.isEmpty()) throw new Exception("No unit areas provided.");

@@ -11,11 +11,6 @@ public class CalendarEvent {
     private Date timestamp;
     private String description;
 
-    public CalendarEvent(){
-
-        // TODO...
-    }
-
     /*! @brief Constructor which initializes the object in case of existing record from database
     *
     * @param[in] id Id of entity in database
