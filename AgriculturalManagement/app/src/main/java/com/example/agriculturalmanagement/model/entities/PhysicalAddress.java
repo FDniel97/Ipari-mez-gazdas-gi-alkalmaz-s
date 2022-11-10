@@ -14,18 +14,6 @@ public class PhysicalAddress {
     private String number;
     private String parcelNumber;
 
-    public PhysicalAddress() throws Exception{
-
-        zipCode = 0;
-        country = "";
-        municipality = "";
-        city = "";
-        district = "";
-        street = "";
-        number = "";
-        parcelNumber = "";
-    }
-
     public PhysicalAddress(int zipCode, String country, String municipality, String city, String district,
                            String street, String number, String parcelNumber) throws Exception {
 

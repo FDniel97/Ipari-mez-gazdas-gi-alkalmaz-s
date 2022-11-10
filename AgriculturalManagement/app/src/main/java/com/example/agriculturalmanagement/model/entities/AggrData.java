@@ -17,11 +17,6 @@ public class AggrData {
     private double overcastIndexAverage;
     private List<Double> overcastIndexByDayList;
 
-    public AggrData(){
-
-        // TODO...
-    }
-
     public double getArea(){
 
         return area;

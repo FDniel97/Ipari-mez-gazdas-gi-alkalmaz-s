@@ -10,11 +10,6 @@ public class UnitArea implements GenArea{
     private double locationLongitude;
     private double locationLatitude;
 
-    public UnitArea(){
-
-        // TODO...
-    }
-
     public UnitArea(String rawData){
 
         // TODO...
