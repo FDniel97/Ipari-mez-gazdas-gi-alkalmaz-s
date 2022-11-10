@@ -1,11 +1,8 @@
-package com.example.agriculturalmanagement.model;
+package com.example.agriculturalmanagement.model.entities;
 
 import java.lang.String;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import com.example.agriculturalmanagement.MainActivity;
-
-import kotlinx.coroutines.MainCoroutineDispatcher;
 
 public class CalendarEvent {
 

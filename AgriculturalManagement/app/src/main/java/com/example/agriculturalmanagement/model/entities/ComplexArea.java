@@ -1,11 +1,8 @@
-package com.example.agriculturalmanagement.model;
+package com.example.agriculturalmanagement.model.entities;
 
 import java.lang.Exception;
 import java.lang.Math;
-import java.lang.Double;
 import java.util.List;
-
-import javax.xml.xpath.XPathException;
 
 public class ComplexArea {
 
