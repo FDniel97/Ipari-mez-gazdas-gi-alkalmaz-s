@@ -1,4 +1,4 @@
-package com.example.agriculturalmanagement.model;
+package com.example.agriculturalmanagement.model.entities;
 
 import java.util.Iterator;
 import java.util.Map;

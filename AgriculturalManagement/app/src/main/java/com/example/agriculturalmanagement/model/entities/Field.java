@@ -1,15 +1,8 @@
-package com.example.agriculturalmanagement.model;
-
-import android.location.Address;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
+package com.example.agriculturalmanagement.model.entities;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ArrayList;
 import java.lang.Exception;
 import java.util.Map;

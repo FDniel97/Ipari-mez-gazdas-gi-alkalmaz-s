@@ -1,8 +1,7 @@
-package com.example.agriculturalmanagement.model;
+package com.example.agriculturalmanagement.model.entities;
 
 import java.lang.String;
 import java.util.Dictionary;
-import java.util.List;
 
 public class LinArea implements GenArea{
 

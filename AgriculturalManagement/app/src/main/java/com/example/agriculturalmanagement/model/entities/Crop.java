@@ -1,9 +1,7 @@
-package com.example.agriculturalmanagement.model;
+package com.example.agriculturalmanagement.model.entities;
 
 import java.lang.String;
 import java.lang.Exception;
-
-import kotlinx.coroutines.ExecutorCoroutineDispatcher;
 
 public class Crop {
 
