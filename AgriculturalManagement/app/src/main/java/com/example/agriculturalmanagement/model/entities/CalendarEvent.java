@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class CalendarEvent {
-
-    private static int recentMaxId;// is calculated in the static constructor
     private int id;
     private int fieldId;
     private String name;
