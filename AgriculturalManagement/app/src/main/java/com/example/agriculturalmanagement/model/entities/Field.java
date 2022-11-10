@@ -340,22 +340,4 @@ public class Field{
             throw new Exception("Area of field is null.");
         }
     }
-
-    // DATABASE MANAGEMENT
-    public static boolean updateDatabase(){
-
-        // TODO...
-
-        return false;
-    }
-
-    public static Field search(Field fieldParams) throws Exception{
-
-        Field fieldResult = new Field();
-
-        // TODO...
-        // iteration on database elements AND using precache buffer...
-
-        return fieldResult;
-    }
 }
