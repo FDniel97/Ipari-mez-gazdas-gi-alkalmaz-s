@@ -1,26 +1,35 @@
 package com.example.agriculturalmanagement.model.entities;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.lang.String;
 import java.lang.Exception;
 
+@Entity(
+        tableName = "crops"
+)
 public class Crop {
-
-    public final Crop ZERO = new Crop("", "", 0, 0);
-
-
+    @PrimaryKey(autoGenerate = true)
     private int id;// id for database entity
+
+    @NonNull
     private String name;
+
+    @NonNull
     private String description;
+
     private double quantity;
     private int price;
 
-
-    public Crop() throws Exception {
-
-        name = "";
-        description = "";
-        quantity = 0.0;
-        price = 0;
+    public Crop(int id, @NonNull String name, @NonNull String description, double quantity, int price) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.quantity = quantity;
+        this.price = price;
     }
 
     /* !@brief Constructor that takes the necessary parameters in order to create crop type
@@ -30,6 +39,7 @@ public class Crop {
     * @param[in] quantity Harvested, processed amount of crop
     * @param[in] price Unit price of the crop
     */
+    @Ignore
     public Crop(String name, String description, double quantity, int price) throws Exception{
 
         if(name.isEmpty()) throw new Exception("Name of crop is empty.");

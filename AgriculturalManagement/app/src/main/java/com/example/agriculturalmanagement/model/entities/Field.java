@@ -32,7 +32,7 @@ public class Field{
         workHours = Duration.ZERO;
         precipitationQuantity = 0;
         events = new HashMap<String, CalendarEvent>();
-        cropType = cropType.ZERO;
+        cropType = null;
         overcastIndex = 0.0;
         lightExposure = 1.0;
         created = LocalDateTime.now();
