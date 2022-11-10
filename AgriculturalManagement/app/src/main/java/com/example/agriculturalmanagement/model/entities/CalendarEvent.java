@@ -1,14 +1,14 @@
 package com.example.agriculturalmanagement.model.entities;
 
-import java.lang.String;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CalendarEvent {
+
     private int id;
     private int fieldId;
     private String name;
-    private LocalDateTime timestamp;
+    private Date timestamp;
     private String description;
 
     public CalendarEvent(){
@@ -24,7 +24,7 @@ public class CalendarEvent {
     * @param[in] timestamp Time when the event has been scheduled for
     * @param[in] description Description text about event
     */
-    public CalendarEvent(int id, int fieldId, String name, LocalDateTime timestamp, String description){
+    public CalendarEvent(int id, int fieldId, String name, Date timestamp, String description){
 
         // assume that the database entries are consistent
 
@@ -42,7 +42,7 @@ public class CalendarEvent {
     * @param[in] timestamp Time when the event has been scheduled for
     * @param[in] description Description text about event
     */
-    public CalendarEvent(int fieldId, String name, LocalDateTime timestamp, String description) throws Exception{
+    public CalendarEvent(int fieldId, String name, Date timestamp, String description) throws Exception{
 
         id = -1;// has not been used, new entity
 
@@ -84,7 +84,7 @@ public class CalendarEvent {
         return name;
     }
 
-    public LocalDateTime getTimestamp(){
+    public Date getTimestamp(){
 
         return timestamp;
     }
@@ -115,7 +115,7 @@ public class CalendarEvent {
         else this.name = name;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) throws Exception{
+    public void setTimestamp(Date timestamp) throws Exception{
 
         if(timestamp != null) this.timestamp = timestamp;
         else throw new Exception("Timestamp is null.");
