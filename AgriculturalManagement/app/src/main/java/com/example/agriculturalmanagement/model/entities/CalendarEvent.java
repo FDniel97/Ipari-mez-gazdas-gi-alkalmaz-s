@@ -2,6 +2,7 @@ package com.example.agriculturalmanagement.model.entities;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
@@ -9,7 +10,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 @Entity(
-        tableName = "calendar_events"
+        tableName = "calendar_events",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = Field.class,
+                        parentColumns = "id",
+                        childColumns = "fieldId",
+                        onUpdate = ForeignKey.CASCADE,
+                        onDelete = ForeignKey.CASCADE
+                )
+        }
 )
 public class CalendarEvent {
     @PrimaryKey(autoGenerate = true)

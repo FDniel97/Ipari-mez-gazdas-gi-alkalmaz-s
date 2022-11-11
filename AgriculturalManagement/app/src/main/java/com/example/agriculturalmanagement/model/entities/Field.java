@@ -1,21 +1,48 @@
 package com.example.agriculturalmanagement.model.entities;
 
+import androidx.annotation.NonNull;
+import androidx.room.Embedded;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.PrimaryKey;
+
 import java.time.Duration;
 import java.util.ArrayList;
 
-public class Field{
+@Entity(
+        tableName = "fields",
+        foreignKeys = {
+                @ForeignKey(
+                        entity = Crop.class,
+                        parentColumns = "id",
+                        childColumns = "cropType",
+                        onUpdate = ForeignKey.CASCADE,
+                        onDelete = ForeignKey.RESTRICT
+                )
+        }
+)
+public class Field {
 
     private static ArrayList<Integer> fieldIdCache;
 
+    @PrimaryKey(autoGenerate = true)
     private int id;// consistency if preserved and maintained by database (avoidance of id redundancy)
+
+    @NonNull
     private String name;
+
+    @NonNull
     private Duration workHours;
+
     private int precipitationQuantity;
     private int cropType;
     private double overcastIndex;
     private double lightExposure;// intensity related light exposure, computing from historical overcastIndex
     private double locationLongitude;
     private double locationLatitude;
+
+    @NonNull
+    @Embedded
     private PhysicalAddress physicalAddress;
 
     /* !@brief Constructor for existing entity creation, getting from database.
