@@ -1,7 +1,6 @@
 package com.example.agriculturalmanagement.model.entities;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Field{
@@ -15,7 +14,6 @@ public class Field{
     private int cropType;
     private double overcastIndex;
     private double lightExposure;// intensity related light exposure, computing from historical overcastIndex
-    private LocalDateTime created;
     private double locationLongitude;
     private double locationLatitude;
     private PhysicalAddress physicalAddress;
@@ -29,14 +27,13 @@ public class Field{
     * @param[in] cropType Type of crop due to homogeneous cultivation on field
     * @param[in] overcastIndex Overcast index for estimating crop development
     * @param[in] lightExposure Light exposure for estimating crop development
-    * @param[in] created Date for creation of field
     * @param[in] locationLongitude Horizontal POI
     * @param[in] locationLatitude Vertical POI
     * @param[in] physicalAddress Postal address including parcel address
     */
     public Field(String name, ComplexArea area, Duration workHours, int precipitationQuantity,
                  int cropType, double overcastIndex, double lightExposure,
-                 LocalDateTime created, double locationLongitude, double locationLatitude,
+                 double locationLongitude, double locationLatitude,
                  PhysicalAddress physicalAddress) throws Exception {
 
         id = -1;// has not been used, new entity
@@ -53,9 +50,6 @@ public class Field{
 
         setLightExposure(lightExposure);
 
-        if(created != null) this.created = created;
-        else throw new Exception("Date of creation is null.");
-
         setLocation(locationLongitude, locationLatitude);
 
         setPhysicalAddress(physicalAddress);
@@ -71,14 +65,13 @@ public class Field{
      * @param[in] cropType Type of crop due to homogeneous cultivation on field
      * @param[in] overcastIndex Overcast index for estimating crop development
      * @param[in] lightExposure Light exposure for estimating crop development
-     * @param[in] created Date for creation of field
      * @param[in] locationLongitude Horizontal POI
      * @param[in] locationLatitude Vertical POI
      * @param[in] physicalAddress Postal address including parcel address
      */
     public Field(int id, String name, Duration workHours, int precipitationQuantity,
                  int cropType, double overcastIndex, double lightExposure,
-                 LocalDateTime created, double locationLongitude, double locationLatitude,
+                 double locationLongitude, double locationLatitude,
                  PhysicalAddress physicalAddress) {
 
         // assumption of consistent database (skipping data condition tests)
@@ -89,7 +82,6 @@ public class Field{
         this.cropType = cropType;
         this.overcastIndex = overcastIndex;
         this.lightExposure = lightExposure;
-        this.created = created;
         this.locationLongitude = locationLongitude;
         this.locationLatitude = locationLatitude;
         this.physicalAddress = physicalAddress;
@@ -135,11 +127,6 @@ public class Field{
     public double getLightExposure() {
 
         return lightExposure;
-    }
-
-    public LocalDateTime getCreated() {
-
-        return created;
     }
 
     public double getLocationLongitude() {
