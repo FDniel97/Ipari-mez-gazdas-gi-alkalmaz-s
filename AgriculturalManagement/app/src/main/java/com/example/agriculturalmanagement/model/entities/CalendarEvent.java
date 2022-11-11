@@ -1,15 +1,30 @@
 package com.example.agriculturalmanagement.model.entities;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 import java.util.Date;
 
+@Entity(
+        tableName = "calendar_events"
+)
 public class CalendarEvent {
-
+    @PrimaryKey(autoGenerate = true)
     private int id;
+
     private int fieldId;
+
+    @NonNull
     private String name;
-    private Date timestamp;
+
+    @NonNull
     private String description;
+
+    @NonNull
+    private Date timestamp;
 
     /*! @brief Constructor which initializes the object in case of existing record from database
     *
@@ -37,10 +52,8 @@ public class CalendarEvent {
     * @param[in] timestamp Time when the event has been scheduled for
     * @param[in] description Description text about event
     */
+    @Ignore
     public CalendarEvent(int fieldId, String name, Date timestamp, String description) throws Exception{
-
-        id = -1;// has not been used, new entity
-
         boolean found = false;
         ArrayList<Integer> fieldIdCache = Field.getFieldIdCache();
         int sizeOfFieldIdCache = fieldIdCache.size();
