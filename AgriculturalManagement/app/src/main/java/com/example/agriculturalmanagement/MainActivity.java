@@ -1,29 +1,53 @@
 package com.example.agriculturalmanagement;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
-import java.util.List;
-import java.lang.Integer;
+import android.view.MenuItem;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
+
+import com.google.android.material.navigation.NavigationView;
+
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-
-    //JDBC dbManager;
+    private AppBarConfiguration appBarConfiguration;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(savedInstanceState == null){
-
-            getSupportFragmentManager().beginTransaction().setReorderingAllowed(true).add(
-                    R.id.fragment_container_view, MenuBarFragment.class, null).commit();
-
-            // question: avoid, overtake, bypass, make db control indirect??
-        }
-
         setContentView(R.layout.activity_main);
 
+        // setup toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
+        // find NavController
+        NavHostFragment host = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.my_nav_host_fragment);
+        navController = host.getNavController();
+
+        // setup appbar
+        DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+        appBarConfiguration = new AppBarConfiguration
+                .Builder(Set.of(R.id.overview_dest, R.id.calendar_dest))
+                .setOpenableLayout(drawerLayout)
+                .build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        // setup sidebar navigation
+        NavigationView sideNav = findViewById(R.id.nav_view);
+        NavigationUI.setupWithNavController(sideNav, navController);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(navController, appBarConfiguration) || super.onSupportNavigateUp();
     }
 }
