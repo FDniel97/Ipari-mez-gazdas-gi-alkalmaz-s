@@ -2,4 +2,6 @@
     <string name="app_name">AgriculturalManagement</string>
     <string name="hello_blank_fragment">Helló üres fragment</string>
     <string name="hello_world">Helló Világ!</string>
+    <string name="overview">Áttekintés</string>
+    <string name="calendar">Naptár</string>
 </resources>
