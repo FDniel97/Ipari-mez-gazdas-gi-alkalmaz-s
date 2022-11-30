@@ -2,6 +2,7 @@ package com.example.agriculturalmanagement.model.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
@@ -18,4 +19,10 @@ public interface FieldDao {
     @Transaction
     @Query("SELECT * FROM fields")
     LiveData<List<FieldWithCropAndEvents>> getAllWithCropAndEvents();
+
+    @Insert
+    void insert(Field field);
+
+    @Query("DELETE FROM fields")
+    void deleteAll();
 }
