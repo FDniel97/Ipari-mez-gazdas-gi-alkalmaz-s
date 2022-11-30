@@ -28,6 +28,9 @@
         android:name="com.example.agriculturalmanagement.FieldListFragment"
         android:label="@string/fields"
         tools:layout="@layout/fragment_field_list">
+        <action
+            android:id="@+id/action_field_list_dest_to_new_field_dest"
+            app:destination="@id/new_field_dest" />
     </fragment>
 
     <fragment
@@ -36,4 +39,10 @@
         android:label="@string/calendar"
         tools:layout="@layout/fragment_calendar">
     </fragment>
+
+    <fragment
+        android:id="@+id/new_field_dest"
+        android:name="com.example.agriculturalmanagement.NewFieldDataFragment"
+        android:label="@string/new_field"
+        tools:layout="@layout/fragment_new_field_data" />
 </navigation>
