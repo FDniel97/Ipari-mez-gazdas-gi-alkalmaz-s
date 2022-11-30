@@ -1,9 +1,7 @@
 package com.example.agriculturalmanagement;
 
 import android.os.Bundle;
-import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -36,7 +34,10 @@ public class MainActivity extends AppCompatActivity {
         // setup appbar
         DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
         appBarConfiguration = new AppBarConfiguration
-                .Builder(Set.of(R.id.overview_dest, R.id.calendar_dest))
+                .Builder(Set.of(
+                        R.id.overview_dest,
+                        R.id.calendar_dest,
+                        R.id.field_list_dest))
                 .setOpenableLayout(drawerLayout)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

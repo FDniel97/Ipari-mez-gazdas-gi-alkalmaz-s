@@ -4,6 +4,9 @@
         android:id="@id/overview_dest"
         android:title="@string/overview" />
     <item
+        android:id="@id/field_list_dest"
+        android:title="@string/fields" />
+    <item
         android:id="@id/calendar_dest"
         android:title="@string/calendar" />
 </menu>
