@@ -24,6 +24,13 @@
     </fragment>
 
     <fragment
+        android:id="@+id/field_list_dest"
+        android:name="com.example.agriculturalmanagement.FieldListFragment"
+        android:label="@string/fields"
+        tools:layout="@layout/fragment_field_list">
+    </fragment>
+
+    <fragment
         android:id="@+id/calendar_dest"
         android:name="com.example.agriculturalmanagement.CalendarFragment"
         android:label="@string/calendar"
