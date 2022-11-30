@@ -14,7 +14,9 @@ import com.example.agriculturalmanagement.model.dao.FieldDao;
 import com.example.agriculturalmanagement.model.entities.CalendarEvent;
 import com.example.agriculturalmanagement.model.entities.Crop;
 import com.example.agriculturalmanagement.model.entities.Field;
+import com.example.agriculturalmanagement.model.entities.PhysicalAddress;
 
+import java.time.Duration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,10 +58,54 @@ public abstract class AppDatabase extends RoomDatabase {
                 @Override
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
+                }
+
+                @Override
+                public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                        super.onOpen(db);
 
                         EXECUTOR.execute(() -> {
 
+                                var fieldDao = instance.fieldDao();
+                                var cropDao = instance.cropDao();
+
+                                fieldDao.deleteAll();
+                                cropDao.deleteAll();
+
+                                cropDao.insert(new Crop(1, "corn", "corn corn", 100, 13));
+
+                                try {
+                                        for (int i = 1; i <= 10; i++)
+                                                fieldDao.insert(new Field(
+                                                        i,
+                                                        "field " + i,
+                                                        Duration.ZERO,
+                                                        -1,
+                                                        1,
+                                                        2.3,
+                                                        4.5,
+                                                        0.0,
+                                                        0.0,
+                                                        new PhysicalAddress(
+                                                                1111,
+                                                                "HU",
+                                                                "x",
+                                                                "x",
+                                                                "x",
+                                                                "x",
+                                                                "x",
+                                                                "x"
+                                                        )
+                                                ));
+                                } catch (Exception e) {
+                                        e.printStackTrace();
+                                }
                         });
+                }
+
+                @Override
+                public void onDestructiveMigration(@NonNull SupportSQLiteDatabase db) {
+                        super.onDestructiveMigration(db);
                 }
         };
 
