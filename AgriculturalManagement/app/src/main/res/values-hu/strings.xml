@@ -5,4 +5,5 @@
     <string name="overview">Áttekintés</string>
     <string name="calendar">Naptár</string>
     <string name="fields">Földek</string>
+    <string name="new_field">Új föld</string>
 </resources>

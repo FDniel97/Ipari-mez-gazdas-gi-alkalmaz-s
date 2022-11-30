@@ -9,11 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.agriculturalmanagement.model.AppViewModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class FieldListFragment extends Fragment {
     public FieldListFragment() { }
@@ -28,6 +30,10 @@ public class FieldListFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        FloatingActionButton fabNewField = view.findViewById(R.id.field_list_new_field);
+        fabNewField.setOnClickListener(v ->
+                Navigation.findNavController(view).navigate(R.id.action_field_list_dest_to_new_field_dest));
 
         RecyclerView recyclerView = view.findViewById(R.id.field_list_recycler_view);
         final var adapter = new FieldListAdapter();
