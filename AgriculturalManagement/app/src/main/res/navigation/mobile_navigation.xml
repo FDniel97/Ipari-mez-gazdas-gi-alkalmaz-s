@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_field_list_dest_to_new_field_dest"
             app:destination="@id/new_field_dest" />
+        <action
+            android:id="@+id/action_field_list_dest_to_field_data_dest"
+            app:destination="@id/field_data_dest" />
     </fragment>
 
     <fragment
@@ -45,4 +48,14 @@
         android:name="com.example.agriculturalmanagement.NewFieldDataFragment"
         android:label="@string/new_field"
         tools:layout="@layout/fragment_new_field_data" />
+
+    <fragment
+        android:id="@+id/field_data_dest"
+        android:name="com.example.agriculturalmanagement.FieldDataFragment"
+        android:label="Field"
+        tools:layout="@layout/fragment_field_data" >
+        <argument
+            android:name="fieldId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
