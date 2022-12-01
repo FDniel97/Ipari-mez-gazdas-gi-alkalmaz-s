@@ -25,4 +25,7 @@ public interface FieldDao {
 
     @Query("DELETE FROM fields")
     void deleteAll();
+
+    @Query("SELECT * FROM fields WHERE id = :fieldId")
+    LiveData<Field> getById(int fieldId);
 }

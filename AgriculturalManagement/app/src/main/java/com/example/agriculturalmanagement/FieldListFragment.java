@@ -31,12 +31,17 @@ public class FieldListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        final var navController = Navigation.findNavController(view);
+
         FloatingActionButton fabNewField = view.findViewById(R.id.field_list_new_field);
-        fabNewField.setOnClickListener(v ->
-                Navigation.findNavController(view).navigate(R.id.action_field_list_dest_to_new_field_dest));
+        fabNewField.setOnClickListener(v -> {
+            navController.navigate(R.id.action_field_list_dest_to_new_field_dest);
+        });
 
         RecyclerView recyclerView = view.findViewById(R.id.field_list_recycler_view);
-        final var adapter = new FieldListAdapter();
+        final var adapter = new FieldListAdapter(field -> {
+            navController.navigate(FieldListFragmentDirections.actionFieldListDestToFieldDataDest(field.getId()));
+        });
 
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));

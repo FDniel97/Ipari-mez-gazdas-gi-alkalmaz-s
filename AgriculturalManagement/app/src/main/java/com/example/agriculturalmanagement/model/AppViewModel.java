@@ -27,4 +27,8 @@ public class AppViewModel extends AndroidViewModel {
     public LiveData<List<Field>> getAllFields() {
         return fields;
     }
+
+    public LiveData<Field> getFieldById(int fieldId) {
+        return fieldDao.getById(fieldId);
+    }
 }
