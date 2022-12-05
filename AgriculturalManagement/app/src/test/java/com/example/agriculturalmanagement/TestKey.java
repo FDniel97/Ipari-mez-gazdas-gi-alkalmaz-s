@@ -9,6 +9,8 @@ public class TestKey extends ComparableKey<TestKey> {
 
     public TestKey(Integer val){
 
+        super();
+
         this.val = val;
     }
 

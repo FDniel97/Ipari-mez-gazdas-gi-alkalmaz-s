@@ -1,6 +1,9 @@
 package com.example.agriculturalmanagement.model;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /* !@brief TreeMap with linear container to provide backward and forward iteration along with
  *    the benefit of tree structure (logarithmic access of elements)
@@ -8,7 +11,7 @@ import java.util.ArrayList;
 public class LinTreeMap<K extends ComparableKey<K>, V> {
 
     // pair auxiliary type
-    public static class Pair<K, V>{
+    public static class Pair<K extends ComparableKey<K>, V> implements Comparable<Pair<K, V> >{
 
         public Pair(){
 
@@ -24,6 +27,11 @@ public class LinTreeMap<K extends ComparableKey<K>, V> {
 
             if(value == null) throw new Exception("Value is null.");
             this.value = value;
+        }
+
+        public int compareTo(Pair<K, V> item){
+
+            return key.compareTo(item.key);
         }
 
         public K key;
@@ -372,5 +380,20 @@ public class LinTreeMap<K extends ComparableKey<K>, V> {
     public ArrayList<Pair<K, V> > getContainer(){
 
         return container;
+    }
+
+    public void RemoveAll(){
+
+        container.clear();
+    }
+
+    public void sort() throws Exception{
+
+        LinTreeMap<K, V> tmp = new LinTreeMap<K, V>();
+
+        for(int i = 0; i < size; ++i)
+            tmp.add(container.get(i));
+
+        container = tmp.getContainer();
     }
 }

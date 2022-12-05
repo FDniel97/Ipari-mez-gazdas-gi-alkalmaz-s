@@ -14,13 +14,13 @@ public class LinTreeMapTests {
         // using wrappers of primitives
 
         // constructors
-        LinTreeMap.Pair<Double, Integer> testObject;
+        LinTreeMap.Pair<TestKey, Integer> testObject;
 
         // default constructor
-        testObject = new LinTreeMap.Pair<Double, Integer>();
+        testObject = new LinTreeMap.Pair<TestKey, Integer>();
 
         // pair initialization
-        testObject = new LinTreeMap.Pair<Double, Integer>(0.1, 1);
+        testObject = new LinTreeMap.Pair<TestKey, Integer>(new TestKey(0), 1);
     }
 
 
@@ -127,8 +127,9 @@ public class LinTreeMapTests {
         testObject.add(new TestKey(2), "two");
 
         // set key by index
+        // automatic sort after modification
         testObject.setKeyByInd(0, new TestKey(5));
-        assertTrue(testObject.getKeyByInd(0).compareTo(new TestKey(5)) == 0);
+        assertTrue(testObject.getKeyByInd(2).compareTo(new TestKey(5)) == 0);
 
         assertEquals("Index out of bounds.", assertThrows(Exception.class, ()->{
 
