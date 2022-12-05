@@ -37,22 +37,19 @@ public class POI{
     public POI(double ang, double lon, double lat, int overlapDir) throws Exception{
 
         if(ang < 0.0 || 360.0 <= ang) throw new Exception("Orientation identifier is out of "
-                + "range (0.0, 360.0].");
+                + "range [0.0, 360.0).");
 
         this.ang = ang;
 
         if(lon < -180.0 || 180.0 <= lon) throw new Exception("Longitudinal location data is out "
-                + "of range (-180.0, 180.0]).");
+                + "of range (-180.0, 180.0].");
 
         this.lon = lon;
 
-        if(lat <= -90.0 || 90.0 <= lat) throw new Exception("Latitudinal location data is out "
+        if(lat < -90.0 || 90.0 < lat) throw new Exception("Latitudinal location data is out "
                 + "of range [-90.0, 90.0].");
 
         this.lat = lat;
-
-        // assume that arbitrary amount of overlaps are allowed
-        if(overlapDir < 0) throw new Exception("Negative value of overlap direction.");
 
         this.overlapDir = overlapDir;
     }
