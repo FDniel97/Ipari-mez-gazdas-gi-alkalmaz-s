@@ -109,6 +109,10 @@ public abstract class AppDatabase extends RoomDatabase {
                 }
         };
 
+        public void execute(Runnable runnable) {
+                EXECUTOR.execute(runnable);
+        }
+
         public abstract CropDao cropDao();
         public abstract FieldDao fieldDao();
 }

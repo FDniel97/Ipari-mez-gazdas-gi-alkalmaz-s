@@ -8,4 +8,7 @@
     <string name="new_field">Új föld</string>
     <string name="weather">Időjárás</string>
     <string name="search">Keresés</string>
+    <string name="delete">Törlés</string>
+    <string name="success">Siker</string>
+    <string name="error">Hiba</string>
 </resources>

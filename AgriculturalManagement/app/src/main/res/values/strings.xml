@@ -9,4 +9,7 @@
     <string name="new_field">New field</string>
     <string name="weather">Weather</string>
     <string name="search">Search</string>
+    <string name="delete">Delete</string>
+    <string name="success">Success</string>
+    <string name="error">Error</string>
 </resources>
