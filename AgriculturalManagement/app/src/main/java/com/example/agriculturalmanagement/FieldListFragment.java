@@ -2,12 +2,21 @@ package com.example.agriculturalmanagement;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -15,9 +24,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.agriculturalmanagement.model.AppViewModel;
+import com.example.agriculturalmanagement.model.entities.Field;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.stream.Collectors;
+
 public class FieldListFragment extends Fragment {
+    private LiveData<List<Field>> allFields;
+
     public FieldListFragment() { }
 
     @Override
@@ -48,8 +67,53 @@ public class FieldListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         var viewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
-        viewModel.getAllFields().observe(getViewLifecycleOwner(), newList -> {
+        allFields = viewModel.getAllFields();
+        allFields.observe(getViewLifecycleOwner(), newList -> {
+            // the filtering based on the search text is lost, but it is a sacrifice I am willing to make...
             adapter.submitList(newList);
         });
+
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.field_list_menu, menu);
+
+                // I don't think this is the recommended way but hey it appears to work...
+                var searchView = (SearchView) menu.findItem(R.id.menu_option_field_search).getActionView();
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String searchText) {
+                        var items = allFields.getValue();
+                        if (items == null)
+                            return true;
+
+                        if (searchText.isEmpty()) {
+                            adapter.submitList(items);
+                            return true;
+                        }
+
+                        // yes, it's inefficient, why do you ask?
+                        var results = items
+                                .stream()
+                                .filter(f -> f.getName().contains(searchText))
+                                .collect(Collectors.toList());
+
+                        adapter.submitList(results);
+                        return true;
+                    }
+                });
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                return false;
+            }
+        }, getViewLifecycleOwner());
     }
 }
