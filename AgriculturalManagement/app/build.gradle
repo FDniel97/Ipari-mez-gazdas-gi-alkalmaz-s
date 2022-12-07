@@ -65,4 +65,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-livedata:2.5.1"
     implementation "androidx.lifecycle:lifecycle-common:2.5.1"
+
+    //network requests
+    implementation 'com.android.volley:volley:1.2.1'
+
+    //JSON
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
 }

@@ -9,4 +9,7 @@
     <item
         android:id="@id/calendar_dest"
         android:title="@string/calendar" />
+    <item
+        android:id="@id/weather_dest"
+        android:title="@string/weather" />
 </menu>

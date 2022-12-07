@@ -58,4 +58,12 @@
             android:name="fieldId"
             app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/weather_dest"
+        android:name="com.example.agriculturalmanagement.WeatherFragment"
+        android:label="@string/weather"
+        tools:layout="@layout/fragment_weather">
+    </fragment>
+
 </navigation>
