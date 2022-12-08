@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'androidx.navigation.safeargs'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
 android {
@@ -41,7 +42,11 @@ android {
 }
 
 dependencies {
-    implementation "androidx.fragment:fragment:1.5.5"
+
+    def fragment_version = '1.5.5'
+
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation "androidx.fragment:fragment:$fragment_version"
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
 

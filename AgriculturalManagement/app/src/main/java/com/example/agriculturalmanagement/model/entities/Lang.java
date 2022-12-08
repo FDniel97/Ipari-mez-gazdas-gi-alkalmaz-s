@@ -8,7 +8,12 @@ public class Lang {
 
     private Map<String, String> fieldLabels;
 
-    Lang(Map<String, String> fieldLabels) throws Exception{
+    public Lang(){
+
+        // TODO...
+    }
+
+    public Lang(Map<String, String> fieldLabels) throws Exception{
 
         if(fieldLabels.isEmpty()) throw new Exception("Field list is empty, language can not be loaded.");
 
