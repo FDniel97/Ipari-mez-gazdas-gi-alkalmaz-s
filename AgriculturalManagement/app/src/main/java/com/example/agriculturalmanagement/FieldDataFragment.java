@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,18 +34,18 @@ public class FieldDataFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        var args = FieldDataFragmentArgs.fromBundle(getArguments());
-        Toast.makeText(requireContext(), "id: " + args.getFieldId(), Toast.LENGTH_SHORT).show();
-
         var navController = Navigation.findNavController(view);
-        var activity = requireActivity();
+        var activity = (AppCompatActivity) requireActivity();
+
+        var args = FieldDataFragmentArgs.fromBundle(getArguments());
+        // activity.getSupportActionBar().setTitle("#" + args.getFieldId());
 
         var viewModel = new ViewModelProvider(activity).get(AppViewModel.class);
         viewModel.getFieldById(args.getFieldId()).observe(getViewLifecycleOwner(), field -> {
             if (field == null)
                 return;
 
-            Toast.makeText(requireContext(), "name: " + field.getName(), Toast.LENGTH_SHORT).show();
+            activity.getSupportActionBar().setTitle(field.getName());
         });
 
         activity.addMenuProvider(new MenuProvider() {
