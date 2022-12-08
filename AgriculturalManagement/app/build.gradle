@@ -37,9 +37,7 @@ android {
 }
 
 dependencies {
-
-    def fragment_version = '1.5.4'
-    implementation "androidx.fragment:fragment:$fragment_version"
+    implementation "androidx.fragment:fragment:1.5.5"
 
     implementation 'androidx.appcompat:appcompat:1.5.1'
 
@@ -70,5 +68,5 @@ dependencies {
     implementation 'com.android.volley:volley:1.2.1'
 
     //JSON
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.0.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.1'
 }
