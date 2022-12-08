@@ -34,35 +34,33 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 public class WeatherFragment extends Fragment {
 
-    boolean isActual = true;
-    Spinner dropdown;
-    Button buttonActual;
-    Button buttonStatistic;
-    //AppViewModel model = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
-    //LiveData<List<Field>> fields = model.getAllFields();
 
-    String[] fieldNames = new String[]{
-            "Herceghalom", "Tatabánya", " Csopak", "Szeged",
-    };
-    String fieldName = fieldNames[0];
+    private HashMap<String, Field> fieldsMap;
+    private  List<String> fieldNames;
+    private String fieldName;
 
-    String dayStart = "2022-11-01";
-    String dayToday = "2022-12-07";
-    int numOfDays = 37;
-    //int numOfDays = 25;
 
-    //Feladat:
-    //Bekérni a tényleges földeket
-    //a neveket kiiratni a dropdownnal, azzal beállítani az értéket
-    //a beállításnál átállítani a kezdődátumot és a latitude-longitude-ot
+    private boolean isActual = true;
+    private Spinner dropdown;
+    private Button buttonActual;
+    private Button buttonStatistic;
 
+    String dayStart;
+    String dayToday;
+    int numOfDays;
 
 
     //Generated code
@@ -91,6 +89,50 @@ public class WeatherFragment extends Fragment {
 
     //////////////////////////////////////////////////////////////////////
 
+    private void setWeatherClassArguments()
+    {
+        var viewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        var allFieldsLiveData = viewModel.getAllFields();
+        var fields = allFieldsLiveData.getValue();
+
+        fieldsMap = new HashMap<String, Field>();
+        fieldNames = new ArrayList<String>();
+        for (int i = 0; i < fields.size(); i++)
+        {
+            Field field = fields.get(i);
+            fieldNames.add(field.getName());
+            fieldsMap.put(field.getName(), field);
+        }
+
+        if (fieldNames != null)
+        {
+            fieldName = fieldNames.get(0);
+        }
+
+        setDates();
+
+    }
+
+    private void setDates()
+    {
+        //I will need this data from the Field objects
+        //LocalDateTime dateStart = fieldsMap.get(fieldName).getDate();
+        //LocalDateTime.parse needs time -> I used 04:20 randomly
+        DateTimeFormatter dtfTemp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime dateStart = LocalDateTime.parse("2022-11-01 04:20", dtfTemp);
+
+
+        LocalDateTime dateNow = LocalDateTime.now();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        numOfDays = (int)ChronoUnit.DAYS.between(dateStart, dateNow);
+
+        dayStart = dateStart.format(dtf);
+        dayToday = dateNow.format(dtf);
+        numOfDays = 37;
+    }
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +140,7 @@ public class WeatherFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setWeatherClassArguments();
 
     }
 
@@ -106,6 +149,7 @@ public class WeatherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
+
         dropdown = rootView.findViewById(R.id.spinnerFieldsForWeather);
         initSpinnerFooter(fieldNames);
 
@@ -113,7 +157,7 @@ public class WeatherFragment extends Fragment {
         buttonActual.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 isActual = true;
-                getWebDataAndUpdateUI(47.50,19,isActual);
+                getWebDataAndUpdateUI(fieldsMap.get(fieldName),isActual);
             }
         });
 
@@ -121,7 +165,7 @@ public class WeatherFragment extends Fragment {
         buttonStatistic.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 isActual = false;
-                getWebDataAndUpdateUI(47.50,19,isActual);
+                getWebDataAndUpdateUI(fieldsMap.get(fieldName),isActual);
             }
         });
 
@@ -132,13 +176,15 @@ public class WeatherFragment extends Fragment {
     public void onViewCreated (View view,
                                Bundle savedInstanceState)
     {
-        //getWebDataAndUpdateUI();
+
     }
 
     @SuppressLint("DefaultLocale")
-    public void getWebDataAndUpdateUI(double latitude, double longitude, boolean isActual)
+    public void getWebDataAndUpdateUI(Field field, boolean isActual)
     {
         String url;
+        double latitude = field.getLocationLatitude();
+        double longitude = field.getLocationLongitude();
 
         if (isActual)
         {
@@ -343,7 +389,7 @@ public class WeatherFragment extends Fragment {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                temperatureMaxText.setText("That didn't work!");
+                temperatureMaxText.setText(dayStart);
             }
         });
         //////////////////////////////////////////////////////////////////////////////////
@@ -353,7 +399,7 @@ public class WeatherFragment extends Fragment {
         queue.add(stringRequest);
     }
 
-    private void initSpinnerFooter(String[] fieldNames) {
+    private void initSpinnerFooter(List<String> fieldNames) {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, fieldNames);
         dropdown.setAdapter(adapter);
@@ -364,9 +410,9 @@ public class WeatherFragment extends Fragment {
                 CharSequence text = (CharSequence) parent.getItemAtPosition(position);
 
                 fieldName = (String)text;
+                setDates();
 
-                //TODO: add latitude and longitude parameters from database
-                getWebDataAndUpdateUI(47.50,19, isActual);
+                getWebDataAndUpdateUI(fieldsMap.get(fieldName), isActual);
 
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);

@@ -84,8 +84,8 @@ public abstract class AppDatabase extends RoomDatabase {
                                                         1,
                                                         2.3,
                                                         4.5,
-                                                        0.0,
-                                                        0.0,
+                                                        19.0 + i,
+                                                        47.5 - i,
                                                         new PhysicalAddress(
                                                                 1111,
                                                                 "HU",
