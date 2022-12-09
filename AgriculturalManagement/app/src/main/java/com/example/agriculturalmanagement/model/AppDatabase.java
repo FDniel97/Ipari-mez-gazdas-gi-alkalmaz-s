@@ -1,6 +1,7 @@
 package com.example.agriculturalmanagement.model;
 
 import android.content.Context;
+import android.icu.util.Calendar;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -9,6 +10,7 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.example.agriculturalmanagement.model.dao.CalendarEventDao;
 import com.example.agriculturalmanagement.model.dao.CropDao;
 import com.example.agriculturalmanagement.model.dao.FieldDao;
 import com.example.agriculturalmanagement.model.entities.CalendarEvent;
@@ -17,6 +19,7 @@ import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.model.entities.PhysicalAddress;
 
 import java.time.Duration;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -100,6 +103,22 @@ public abstract class AppDatabase extends RoomDatabase {
                                 } catch (Exception e) {
                                         e.printStackTrace();
                                 }
+
+                                var now = System.currentTimeMillis();
+                                var calendarEventDao = instance.calendarEventDao();
+                                calendarEventDao.deleteAll();
+
+                                for (int i = 1; i <= 24; i++) {
+                                        calendarEventDao.insert(new CalendarEvent(
+                                                0,
+                                                i % 10 + 1,
+                                                "event #" + i,
+                                                new Date(now),
+                                                "the event #" + i + " description"
+                                        ));
+
+                                        now += 3600 * 1000;
+                                }
                         });
                 }
 
@@ -115,4 +134,5 @@ public abstract class AppDatabase extends RoomDatabase {
 
         public abstract CropDao cropDao();
         public abstract FieldDao fieldDao();
+        public abstract CalendarEventDao calendarEventDao();
 }
