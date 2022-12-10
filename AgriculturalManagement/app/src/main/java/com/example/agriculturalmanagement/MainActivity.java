@@ -37,7 +37,9 @@ public class MainActivity extends AppCompatActivity {
                 .Builder(Set.of(
                         R.id.overview_dest,
                         R.id.calendar_dest,
-                        R.id.field_list_dest, R.id.weather_dest))
+                        R.id.field_list_dest,
+                        R.id.weather_dest,
+                        R.id.about_us_dest))
                 .setOpenableLayout(drawerLayout)
                 .build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
