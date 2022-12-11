@@ -85,5 +85,18 @@
         android:name="com.example.agriculturalmanagement.CropListFragment"
         android:label="@string/crops"
         tools:layout="@layout/fragment_crop_list">
+        <action
+            android:id="@+id/action_crop_list_dest_to_crop_data_dest"
+            app:destination="@id/crop_data_dest" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/crop_data_dest"
+        android:name="com.example.agriculturalmanagement.CropDataFragment"
+        android:label="@string/crop"
+        tools:layout="@layout/fragment_crop_data" >
+        <argument
+            android:name="cropId"
+            app:argType="integer" />
     </fragment>
 </navigation>

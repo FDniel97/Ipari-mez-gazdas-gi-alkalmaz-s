@@ -16,4 +16,5 @@
     <string name="about_us">About Us</string>
     <string name="crops">Crops</string>
     <string name="new_crop">New crop</string>
+    <string name="crop">Crop</string>
 </resources>

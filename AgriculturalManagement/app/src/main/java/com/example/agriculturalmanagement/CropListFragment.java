@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,14 +31,16 @@ public class CropListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FloatingActionButton fabNewCrop = view.findViewById(R.id.crop_list_new_crop);
-        fabNewCrop.setOnClickListener(v -> {
+        final var navController = Navigation.findNavController(view);
+
+        FloatingActionButton fabNewField = view.findViewById(R.id.crop_list_new_crop);
+        fabNewField.setOnClickListener(v -> {
             // TODO
         });
 
         RecyclerView recyclerView = view.findViewById(R.id.crop_list_recycler_view);
         final var adapter = new CropListAdapter(item -> {
-            // TODO
+            navController.navigate(CropListFragmentDirections.actionCropListDestToCropDataDest(item.getId()));
         });
 
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));

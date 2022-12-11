@@ -15,4 +15,5 @@
     <string name="about_us">Rólunk</string>
     <string name="crops">Termények</string>
     <string name="new_crop">Új termény</string>
+    <string name="crop">Termény</string>
 </resources>
