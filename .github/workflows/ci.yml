@@ -29,3 +29,15 @@ jobs:
       - name: Run tests
         working-directory: ./AgriculturalManagement
         run: ./gradlew test
+
+      - name: Assemble application
+        uses: sparkfabrik/android-build-action@v1.2.0
+        with:
+          project-path: ./AgriculturalManagement
+          output-path: ./AgriculturalManagement.apk
+
+      - name: Archive apk
+        uses: actions/upload-artifact@v3
+        with:
+          name: AgriculturalManagement.apk
+          path: ./AgriculturalManagement.apk
