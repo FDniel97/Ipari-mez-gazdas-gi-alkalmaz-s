@@ -35,7 +35,7 @@ public class CropListFragment extends Fragment {
 
         FloatingActionButton fabNewField = view.findViewById(R.id.crop_list_new_crop);
         fabNewField.setOnClickListener(v -> {
-            // TODO
+            navController.navigate(CropListFragmentDirections.actionCropListDestToNewCropDest());
         });
 
         RecyclerView recyclerView = view.findViewById(R.id.crop_list_recycler_view);

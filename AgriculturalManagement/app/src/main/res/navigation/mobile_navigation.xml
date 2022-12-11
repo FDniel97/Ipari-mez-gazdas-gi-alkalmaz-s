@@ -88,6 +88,9 @@
         <action
             android:id="@+id/action_crop_list_dest_to_crop_data_dest"
             app:destination="@id/crop_data_dest" />
+        <action
+            android:id="@+id/action_crop_list_dest_to_new_crop_dest"
+            app:destination="@id/new_crop_dest" />
     </fragment>
 
     <fragment
@@ -99,4 +102,10 @@
             android:name="cropId"
             app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/new_crop_dest"
+        android:name="com.example.agriculturalmanagement.NewCropDataFragment"
+        android:label="@string/new_crop"
+        tools:layout="@layout/fragment_new_crop_data" />
 </navigation>

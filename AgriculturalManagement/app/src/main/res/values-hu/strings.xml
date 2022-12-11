@@ -16,4 +16,8 @@
     <string name="crops">Termények</string>
     <string name="new_crop">Új termény</string>
     <string name="crop">Termény</string>
+    <string name="save">Mentés</string>
+    <string name="cancel">Mégse</string>
+    <string name="name">Név</string>
+    <string name="description">Leírás</string>
 </resources>

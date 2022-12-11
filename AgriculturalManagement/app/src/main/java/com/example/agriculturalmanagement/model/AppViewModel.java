@@ -67,6 +67,13 @@ public class AppViewModel extends AndroidViewModel {
         }, resultReceiver);
     }
 
+    public void insertCrop(Crop crop, ResultReceiver<Void> resultReceiver) {
+        doDbOperation(() -> {
+            cropDao.insert(crop);
+            return null;
+        }, resultReceiver);
+    }
+
     // the ResultReceiver callbacks are run on the main thread of the application
     private <T> void doDbOperation(Supplier<T> operation, ResultReceiver<T> resultReceiver) {
         db.execute(() -> {
