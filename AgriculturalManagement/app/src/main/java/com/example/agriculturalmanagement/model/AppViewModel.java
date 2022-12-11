@@ -45,6 +45,10 @@ public class AppViewModel extends AndroidViewModel {
         return fieldDao.getById(fieldId);
     }
 
+    public LiveData<Integer> getFieldCountForCrop(int cropId) {
+        return fieldDao.getCountForCrop(cropId);
+    }
+
     public void deleteFieldById(int fieldId, ResultReceiver<Void> resultReceiver) {
         doDbOperation(() -> {
             fieldDao.deleteById(fieldId);
