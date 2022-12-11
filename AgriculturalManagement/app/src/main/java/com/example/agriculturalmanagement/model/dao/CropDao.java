@@ -23,4 +23,7 @@ public interface CropDao {
 
     @Query("SELECT * FROM crops")
     LiveData<List<Crop>> getAll();
+
+    @Query("SELECT * FROM crops WHERE id = :cropId")
+    LiveData<Crop> getById(int cropId);
 }
