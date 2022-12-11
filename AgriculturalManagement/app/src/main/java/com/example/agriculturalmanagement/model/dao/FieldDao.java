@@ -31,4 +31,7 @@ public interface FieldDao {
 
     @Query("SELECT * FROM fields WHERE id = :fieldId")
     LiveData<Field> getById(int fieldId);
+
+    @Query("SELECT COUNT(*) FROM fields WHERE cropType = :cropId")
+    LiveData<Integer> getCountForCrop(int cropId);
 }

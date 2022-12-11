@@ -25,6 +25,7 @@ import com.example.agriculturalmanagement.util.ResultReceiver;
 public class CropDataFragment extends Fragment {
     public MutableLiveData<String> name = new MutableLiveData<>();
     public MutableLiveData<String> desc = new MutableLiveData<>();
+    public MutableLiveData<Integer> fieldCount = new MutableLiveData<>(0);
 
     public CropDataFragment() { }
 
@@ -57,6 +58,10 @@ public class CropDataFragment extends Fragment {
             activity.getSupportActionBar().setTitle(item.getName());
             name.setValue(item.getName());
             desc.setValue(item.getDescription());
+        });
+
+        viewModel.getFieldCountForCrop(cropId).observe(getViewLifecycleOwner(), value -> {
+            fieldCount.setValue(value);
         });
 
         activity.addMenuProvider(new MenuProvider() {
