@@ -101,11 +101,19 @@
         <argument
             android:name="cropId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_crop_data_dest_to_new_crop_dest"
+            app:destination="@id/new_crop_dest" />
     </fragment>
 
     <fragment
         android:id="@+id/new_crop_dest"
         android:name="com.example.agriculturalmanagement.NewCropDataFragment"
         android:label="@string/new_crop"
-        tools:layout="@layout/fragment_new_crop_data" />
+        tools:layout="@layout/fragment_new_crop_data" >
+        <argument
+            android:name="cropId"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
 </navigation>

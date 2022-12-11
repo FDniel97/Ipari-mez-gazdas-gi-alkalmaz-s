@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,6 +24,8 @@ import com.example.agriculturalmanagement.model.entities.Crop;
 import com.example.agriculturalmanagement.util.ResultReceiver;
 
 public class NewCropDataFragment extends Fragment {
+    private Crop editedEntity;
+
     public NewCropDataFragment() { }
 
     @Override
@@ -35,12 +38,32 @@ public class NewCropDataFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        var activity = requireActivity();
+        var cropId = NewCropDataFragmentArgs.fromBundle(getArguments()).getCropId();
+
+        var activity = (AppCompatActivity) requireActivity();
         var viewModel = new ViewModelProvider(activity).get(AppViewModel.class);
         var navController = Navigation.findNavController(view);
 
         EditText nameField = view.findViewById(R.id.new_crop_data_crop_name);
         EditText descField = view.findViewById(R.id.new_crop_data_crop_desc);
+
+        if (cropId > 0) {
+            nameField.setEnabled(false);
+            descField.setEnabled(false);
+
+            viewModel.getCropById(cropId).observe(getViewLifecycleOwner(), item -> {
+                if (editedEntity != null)
+                    return;
+
+                editedEntity = item;
+                nameField.setText(item.getName());
+                descField.setText(item.getDescription());
+                nameField.setEnabled(true);
+                descField.setEnabled(true);
+
+                activity.getSupportActionBar().setTitle(item.getName());
+            });
+        }
 
         activity.addMenuProvider(new MenuProvider() {
             @Override
@@ -55,9 +78,9 @@ public class NewCropDataFragment extends Fragment {
                     var desc = descField.getText().toString();
 
                     if (!name.isEmpty() && !desc.isEmpty()) {
-                        var crop = new Crop(0, name, desc, -1, -1);
+                        var crop = new Crop(cropId, name, desc, -1, -1);
 
-                        viewModel.insertCrop(crop, new ResultReceiver<>() {
+                        var resultReceiver = new ResultReceiver<Void>() {
                             @Override
                             public void onSuccess(Void value) {
                                 Toast.makeText(requireContext(), R.string.success, Toast.LENGTH_SHORT).show();
@@ -68,7 +91,12 @@ public class NewCropDataFragment extends Fragment {
                             public void onFailure(@NonNull Exception e) {
                                 Toast.makeText(requireContext(), R.string.error, Toast.LENGTH_SHORT).show();
                             }
-                        });
+                        };
+
+                        if (cropId > 0)
+                            viewModel.updateCrop(crop, resultReceiver);
+                        else
+                            viewModel.insertCrop(crop, resultReceiver);
                     }
 
                     return true;
