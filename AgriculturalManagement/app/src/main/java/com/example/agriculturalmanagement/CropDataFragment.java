@@ -14,20 +14,29 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.agriculturalmanagement.databinding.FragmentCropDataBinding;
 import com.example.agriculturalmanagement.model.AppViewModel;
 import com.example.agriculturalmanagement.util.ResultReceiver;
 
 public class CropDataFragment extends Fragment {
+    public MutableLiveData<String> name = new MutableLiveData<>();
+    public MutableLiveData<String> desc = new MutableLiveData<>();
+
     public CropDataFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_crop_data, container, false);
+        var binding = FragmentCropDataBinding.inflate(inflater, container, false);
+        binding.setViewModel(this);
+        binding.setLifecycleOwner(getViewLifecycleOwner());
+
+        return binding.getRoot();
     }
 
     @Override
@@ -46,6 +55,8 @@ public class CropDataFragment extends Fragment {
                 return;
 
             activity.getSupportActionBar().setTitle(item.getName());
+            name.setValue(item.getName());
+            desc.setValue(item.getDescription());
         });
 
         activity.addMenuProvider(new MenuProvider() {
