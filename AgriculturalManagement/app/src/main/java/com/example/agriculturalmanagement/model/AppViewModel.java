@@ -56,6 +56,10 @@ public class AppViewModel extends AndroidViewModel {
         return crops;
     }
 
+    public LiveData<Crop> getCropById(int cropId) {
+        return cropDao.getById(cropId);
+    }
+
     // the ResultReceiver callbacks are run on the main thread of the application
     private <T> void doDbOperation(Supplier<T> operation, ResultReceiver<T> resultReceiver) {
         db.execute(() -> {
