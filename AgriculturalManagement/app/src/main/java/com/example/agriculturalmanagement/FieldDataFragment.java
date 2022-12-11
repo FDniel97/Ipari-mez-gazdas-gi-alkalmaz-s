@@ -122,7 +122,7 @@ public class FieldDataFragment extends Fragment {
             c.setOnClickListener(v -> {
                 // https://stackoverflow.com/questions/71565073/why-does-navigation-not-work-in-the-navigation-drawer-activity-template-with-ver
                 NavOptions navOptions = new NavOptions.Builder()
-                        .setPopUpTo(R.id.overview_dest, false, false)
+                        .setPopUpTo(R.id.weather_dest, false, false)
                         .setRestoreState(true)
                         .build();
                 navController.navigate(FieldDataFragmentDirections.actionFieldDataDestToWeatherFragmentDest(), navOptions);
