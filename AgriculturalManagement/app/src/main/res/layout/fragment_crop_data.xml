@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".CropDataFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+        <variable
+            name="viewModel"
+            type="com.example.agriculturalmanagement.CropDataFragment" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        tools:context=".CropDataFragment"
+        android:orientation="vertical" >
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp" >
+
+            <include
+                layout="@layout/include_text_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardName='@{@string/name}'
+                app:cardText="@{viewModel.name}"
+                app:cardBackgroundColorInt="@{@color/purple_100}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp" >
+
+            <include
+                layout="@layout/include_text_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardName='@{@string/description}'
+                app:cardText="@{viewModel.desc}"
+                app:cardBackgroundColorInt="@{@color/purple_100}" />
+        </LinearLayout>
+    </LinearLayout>
+</layout>
