@@ -26,6 +26,7 @@
             app:destination="@id/field_list_dest" />
     </fragment>
 
+
     <fragment
         android:id="@+id/field_list_dest"
         android:name="com.example.agriculturalmanagement.FieldListFragment"
@@ -60,6 +61,9 @@
         <argument
             android:name="fieldId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_field_data_dest_to_weather_fragment_dest"
+            app:destination="@id/weather_dest" />
     </fragment>
 
     <fragment
