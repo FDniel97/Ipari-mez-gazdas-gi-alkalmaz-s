@@ -7,6 +7,9 @@
         android:id="@id/field_list_dest"
         android:title="@string/fields" />
     <item
+        android:id="@id/crop_list_dest"
+        android:title="@string/crops" />
+    <item
         android:id="@id/calendar_dest"
         android:title="@string/calendar" />
     <item

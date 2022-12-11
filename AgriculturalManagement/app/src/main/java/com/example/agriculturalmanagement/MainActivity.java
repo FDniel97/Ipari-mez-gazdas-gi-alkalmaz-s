@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
                         R.id.overview_dest,
                         R.id.calendar_dest,
                         R.id.field_list_dest,
+                        R.id.crop_list_dest,
                         R.id.weather_dest,
                         R.id.about_us_dest))
                 .setOpenableLayout(drawerLayout)
