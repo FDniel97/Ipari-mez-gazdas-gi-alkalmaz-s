@@ -17,4 +17,8 @@
     <string name="crops">Crops</string>
     <string name="new_crop">New crop</string>
     <string name="crop">Crop</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
 </resources>
