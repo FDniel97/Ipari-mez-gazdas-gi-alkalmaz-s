@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.agriculturalmanagement.model.entities.Crop;
 
@@ -14,6 +15,9 @@ import java.util.List;
 public interface CropDao {
     @Insert
     void insert(Crop crop);
+
+    @Update
+    void update(Crop crop);
 
     @Delete
     void delete(Crop crop);

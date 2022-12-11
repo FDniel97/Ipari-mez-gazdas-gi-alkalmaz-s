@@ -56,7 +56,9 @@ public class CropDataFragment extends Fragment {
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.menu_option_delete_crop) {
+                if (menuItem.getItemId() == R.id.menu_option_edit_crop) {
+                    navController.navigate(CropDataFragmentDirections.actionCropDataDestToNewCropDest().setCropId(cropId));
+                } else if (menuItem.getItemId() == R.id.menu_option_delete_crop) {
                     viewModel.deleteCropById(cropId, new ResultReceiver<>() {
                         @Override
                         public void onSuccess(Void value) {
