@@ -60,6 +60,13 @@ public class AppViewModel extends AndroidViewModel {
         return cropDao.getById(cropId);
     }
 
+    public void deleteCropById(int cropId, ResultReceiver<Void> resultReceiver) {
+        doDbOperation(() -> {
+            cropDao.deleteById(cropId);
+            return null;
+        }, resultReceiver);
+    }
+
     // the ResultReceiver callbacks are run on the main thread of the application
     private <T> void doDbOperation(Supplier<T> operation, ResultReceiver<T> resultReceiver) {
         db.execute(() -> {

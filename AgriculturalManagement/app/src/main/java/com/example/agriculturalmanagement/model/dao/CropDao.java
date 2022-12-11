@@ -18,6 +18,9 @@ public interface CropDao {
     @Delete
     void delete(Crop crop);
 
+    @Query("DELETE FROM crops WHERE id = :cropId")
+    void deleteById(int cropId);
+
     @Query("DELETE FROM crops")
     void deleteAll();
 
