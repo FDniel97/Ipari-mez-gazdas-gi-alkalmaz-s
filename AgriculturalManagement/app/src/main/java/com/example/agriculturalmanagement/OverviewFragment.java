@@ -20,6 +20,7 @@ import com.google.android.material.card.MaterialCardView;
 
 public class OverviewFragment extends Fragment {
     public MutableLiveData<Integer> fieldCount = new MutableLiveData<>(0);
+    public MutableLiveData<Integer> cropCount = new MutableLiveData<>(0);
 
     public OverviewFragment() { }
 
@@ -54,6 +55,22 @@ public class OverviewFragment extends Fragment {
                         .setRestoreState(true)
                         .build();
                 navController.navigate(OverviewFragmentDirections.actionOverviewDestToFieldListDest(), navOptions);
+            });
+        }
+
+        viewModel.getAllCrops().observe(getViewLifecycleOwner(), newValue -> {
+            cropCount.setValue(newValue.size());
+        });
+
+        {
+            MaterialCardView c = view.findViewById(R.id.crop_count_card);
+            c.setOnClickListener(v -> {
+                // https://stackoverflow.com/questions/71565073/why-does-navigation-not-work-in-the-navigation-drawer-activity-template-with-ver
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.overview_dest, false, true)
+                        .setRestoreState(true)
+                        .build();
+                navController.navigate(OverviewFragmentDirections.actionOverviewDestToCropListDest(), navOptions);
             });
         }
     }
