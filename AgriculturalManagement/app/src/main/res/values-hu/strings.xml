@@ -13,4 +13,6 @@
     <string name="error">Hiba</string>
     <string name="welcome_back">Üdv újra!</string>
     <string name="about_us">Rólunk</string>
+    <string name="crops">Termények</string>
+    <string name="new_crop">Új termény</string>
 </resources>

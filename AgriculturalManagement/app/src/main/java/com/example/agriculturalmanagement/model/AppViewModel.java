@@ -6,7 +6,9 @@ import android.os.Handler;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
+import com.example.agriculturalmanagement.model.dao.CropDao;
 import com.example.agriculturalmanagement.model.dao.FieldDao;
+import com.example.agriculturalmanagement.model.entities.Crop;
 import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.util.ResultReceiver;
 
@@ -20,6 +22,9 @@ public class AppViewModel extends AndroidViewModel {
     private final FieldDao fieldDao;
     private final LiveData<List<Field>> fields;
 
+    private final CropDao cropDao;
+    private final LiveData<List<Crop>> crops;
+
     public AppViewModel(Application application) {
         super(application);
         db = AppDatabase.getInstance(application);
@@ -27,6 +32,9 @@ public class AppViewModel extends AndroidViewModel {
 
         fieldDao = db.fieldDao();
         fields = fieldDao.getAll();
+
+        cropDao = db.cropDao();
+        crops = cropDao.getAll();
     }
 
     public LiveData<List<Field>> getAllFields() {
@@ -42,6 +50,10 @@ public class AppViewModel extends AndroidViewModel {
             fieldDao.deleteById(fieldId);
             return null;
         }, resultReceiver);
+    }
+
+    public LiveData<List<Crop>> getAllCrops() {
+        return crops;
     }
 
     // the ResultReceiver callbacks are run on the main thread of the application

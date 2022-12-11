@@ -80,4 +80,10 @@
         tools:layout="@layout/fragment_about_us">
     </fragment>
 
+    <fragment
+        android:id="@+id/crop_list_dest"
+        android:name="com.example.agriculturalmanagement.CropListFragment"
+        android:label="@string/crops"
+        tools:layout="@layout/fragment_crop_list">
+    </fragment>
 </navigation>
