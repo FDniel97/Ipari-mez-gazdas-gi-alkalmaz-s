@@ -17,8 +17,8 @@ public interface FieldDao {
     LiveData<List<Field>> getAll();
 
     @Transaction
-    @Query("SELECT * FROM fields")
-    LiveData<List<FieldWithCropAndEvents>> getAllWithCropAndEvents();
+    @Query("SELECT * FROM fields WHERE id = :fieldId")
+    LiveData<FieldWithCropAndEvents> getWithCropAndEventsById(int fieldId);
 
     @Insert
     void insert(Field field);

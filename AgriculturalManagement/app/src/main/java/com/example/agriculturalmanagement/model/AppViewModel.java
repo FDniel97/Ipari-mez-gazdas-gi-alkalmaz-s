@@ -12,6 +12,7 @@ import com.example.agriculturalmanagement.model.dao.FieldDao;
 import com.example.agriculturalmanagement.model.entities.CalendarEvent;
 import com.example.agriculturalmanagement.model.entities.Crop;
 import com.example.agriculturalmanagement.model.entities.Field;
+import com.example.agriculturalmanagement.model.entities.FieldWithCropAndEvents;
 import com.example.agriculturalmanagement.util.ResultReceiver;
 
 import java.util.List;
@@ -45,6 +46,10 @@ public class AppViewModel extends AndroidViewModel {
 
     public LiveData<List<Field>> getAllFields() {
         return fields;
+    }
+
+    public LiveData<FieldWithCropAndEvents> getFieldWithCropAndEventsById(int fieldId) {
+        return fieldDao.getWithCropAndEventsById(fieldId);
     }
 
     public LiveData<Field> getFieldById(int fieldId) {

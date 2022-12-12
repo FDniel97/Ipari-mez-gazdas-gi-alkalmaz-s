@@ -76,6 +76,9 @@
         <action
             android:id="@+id/action_field_data_dest_to_weather_fragment_dest"
             app:destination="@id/weather_dest" />
+        <action
+            android:id="@+id/action_field_data_dest_to_calendar_event_dest"
+            app:destination="@id/calendar_event_dest" />
     </fragment>
 
     <fragment
