@@ -12,6 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.example.agriculturalmanagement.model.dao.CropDao;
 import com.example.agriculturalmanagement.model.dao.FieldDao;
 import com.example.agriculturalmanagement.model.entities.CalendarEvent;
+import com.example.agriculturalmanagement.model.entities.ComplexArea;
 import com.example.agriculturalmanagement.model.entities.Crop;
 import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.model.entities.PhysicalAddress;
@@ -83,11 +84,10 @@ public abstract class AppDatabase extends RoomDatabase {
                                                         -1,
                                                         1,
                                                         2.3,
-                                                        4.5,
                                                         19.0 + i,
                                                         47.5 - i,
                                                         new PhysicalAddress(
-                                                                1111,
+                                                                "1111",
                                                                 "HU",
                                                                 "x",
                                                                 "x",
@@ -95,7 +95,8 @@ public abstract class AppDatabase extends RoomDatabase {
                                                                 "x",
                                                                 "x",
                                                                 "x"
-                                                        )
+                                                        ),
+                                                        new ComplexArea()
                                                 ));
                                 } catch (Exception e) {
                                         e.printStackTrace();

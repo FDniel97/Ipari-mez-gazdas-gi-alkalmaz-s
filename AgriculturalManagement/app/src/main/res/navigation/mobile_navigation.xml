@@ -54,7 +54,22 @@
         android:id="@+id/new_field_dest"
         android:name="com.example.agriculturalmanagement.NewFieldDataFragment"
         android:label="@string/new_field"
-        tools:layout="@layout/fragment_new_field_data" />
+        tools:layout="@layout/fragment_new_field_data" >
+        <action
+            android:id="@+id/action_new_field_dest_to_crop_selector_dest"
+            app:destination="@id/crop_selector_dest" />
+        <action
+            android:id="@+id/action_new_field_dest_to_field_shape_editor_dest"
+            app:destination="@id/field_shape_editor_dest" />
+        <action
+            android:id="@+id/action_new_field_dest_to_address_editor_dest"
+            app:destination="@id/address_editor_dest" />
+        <action
+            android:id="@+id/action_new_field_dest_to_field_list_dest"
+            app:destination="@id/field_list_dest"
+            app:popUpTo="@+id/new_field_list"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/field_data_dest"
@@ -97,6 +112,35 @@
     </fragment>
 
     <fragment
+        android:id="@+id/address_editor_dest"
+        android:name="com.example.agriculturalmanagement.newFieldData.AddressEditorFragment"
+        android:label="Address Editor"
+        tools:layout="@layout/fragment_address_editor" >
+        <action
+            android:id="@+id/action_address_editor_dest_to_new_field_dest"
+            app:destination="@id/new_field_dest"
+            app:popUpTo="@+id/new_field_dest"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/field_shape_editor_dest"
+        android:name="com.example.agriculturalmanagement.newFieldData.FieldShapeEditor"
+        android:label="Field shape editor"
+        tools:layout="@layout/fragment_field_shape_editor" >
+        <action
+            android:id="@+id/action_field_shape_editor_dest_to_new_field_dest"
+            app:destination="@id/new_field_dest"
+            app:popUpTo="@+id/new_field_dest"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/crop_selector_dest"
+        android:name="com.example.agriculturalmanagement.newFieldData.SelectCropTypeDialog"
+        android:label="Crop data selector"
+        android:id="@+id/action_crop_selector_dest_to_new_field_dest"
+        app:destination="@id/new_field_dest" />
+    </fragment>
+    <fragment
         android:id="@+id/crop_data_dest"
         android:name="com.example.agriculturalmanagement.CropDataFragment"
         android:label="@string/crop"
@@ -119,4 +163,5 @@
             app:argType="integer"
             android:defaultValue="0" />
     </fragment>
+
 </navigation>

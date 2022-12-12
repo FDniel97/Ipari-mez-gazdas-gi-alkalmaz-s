@@ -5,11 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModelProvider;
 
-import android.os.Handler;
-import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,71 +16,33 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-//JSON
-import com.example.agriculturalmanagement.model.AppViewModel;
-import com.example.agriculturalmanagement.model.entities.Field;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import com.example.agriculturalmanagement.model.WeatherStatus;
 
 public class WeatherFragment extends Fragment {
 
+    WeatherStatus weatherStatus;
 
-    private HashMap<String, Field> fieldsMap;
-    private  List<String> fieldNames;
-    private String fieldName;
+    private boolean isActual = true;
+    private Spinner dropdown;
+    private Button buttonActual;
+    private Button buttonStatistic;
+    //AppViewModel model = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+    //LiveData<List<Field>> fields = model.getAllFields();
 
+    private String[] fieldNames = new String[]{"Herceghalom", "Tatabánya", " Csopak", "Szeged"};
+
+    private String fieldName = fieldNames[0];
+
+    private String dayStart = "2022-11-01";
+    private String dayToday = "2022-12-07";
 
     private boolean isActual = true;
     private Spinner dropdown;
     private Button buttonActual;
     private Button buttonStatistic;
 
-    String dayStart;
-    String dayToday;
-    int numOfDays;
-
-
-    //Generated code
-    /////////////////////////////////////////////////////////////////////////
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public WeatherFragment() {
         // Required empty public constructor
-    }
-
-    public static WeatherFragment newInstance(String param1, String param2) {
-        WeatherFragment fragment = new WeatherFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
     }
 
     //////////////////////////////////////////////////////////////////////
@@ -136,17 +94,14 @@ public class WeatherFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        
         setWeatherClassArguments();
 
     }
-
+    
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_weather, container, false);
 
@@ -173,48 +128,29 @@ public class WeatherFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated (View view,
-                               Bundle savedInstanceState)
-    {
-
+    public void onViewCreated (View view, Bundle savedInstanceState) {
+        //getWebDataAndUpdateUI();
     }
 
     @SuppressLint("DefaultLocale")
-    public void getWebDataAndUpdateUI(Field field, boolean isActual)
-    {
-        String url;
-        double latitude = field.getLocationLatitude();
-        double longitude = field.getLocationLongitude();
+    public void getWebDataAndUpdateUI(double latitude, double longitude, boolean isActual) {
 
-        if (isActual)
-        {
-            url = String.format("https://api.open-meteo.com/v1/forecast?latitude=" +
-                            "%f" +
-                            "&longitude=" +
-                            "%f" +
-                            "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,shortwave_radiation_sum&current_weather=true&timezone=auto",
-                    latitude, longitude);
-            getActualWebDataAndUpdateUI(url);
+        if(isActual){
+            weatherStatus.updateActualWeather(latitude, longitude, getContext());
+            getActualWebDataAndUpdateUI();
         }
-        else
-        {
-            url = String.format("https://archive-api.open-meteo.com/v1/era5?latitude=" +
-                            "%f" +
-                            "&longitude=" +
-                            "%f" +
-                            "&&start_date=" +
-                            dayStart +
-                            "&end_date=" +
-                            dayToday +
-                            "&daily=temperature_2m_max,temperature_2m_min,shortwave_radiation_sum,precipitation_sum,precipitation_hours,windspeed_10m_max&timezone=auto",
-                    latitude, longitude);
-            getStatisticWebDataAndUpdateUI(url);
+        else {
+
+            weatherStatus.updateStatisticWeatherData(latitude, longitude, dayStart, dayToday, getContext());
+            getStatisticWebDataAndUpdateUI();
         }
     }
 
-    public void getActualWebDataAndUpdateUI(String url) {
-        // Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+    public void getActualWebDataAndUpdateUI() {
+
+        // todo
+        //  refactor naming conventions along with hidden attributes
+
 
         TextView headerText = (TextView) getView().findViewById(R.id.textviewHeader);
         TextView temperatureText = (TextView) getView().findViewById(R.id.textview1);
@@ -224,58 +160,20 @@ public class WeatherFragment extends Fragment {
         TextView radiationText = (TextView) getView().findViewById(R.id.textview5);
         TextView windspeedText = (TextView) getView().findViewById(R.id.textview6);
 
-
-
-        // Request a string response from the provided URL.
-        ///////////////////////////////////////////////////////////////////////////////
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        ObjectMapper mapper = new ObjectMapper();
-
-                        try {
-
-                            // convert JSON string to Map
-                            JsonNode responseMap = mapper.readTree(response);
-
-                            //Set texts
-                            double temperature = responseMap.get("current_weather").get("temperature").asDouble();
-                            double temperatureMin = responseMap.get("daily").get("temperature_2m_min").get(0).asDouble();
-                            double temperatureMax = responseMap.get("daily").get("temperature_2m_max").get(0).asDouble();
-                            double precipitation = responseMap.get("daily").get("precipitation_sum").get(0).asDouble();
-                            double radiation = responseMap.get("daily").get("shortwave_radiation_sum").get(0).asDouble();
-                            double windspeed = responseMap.get("current_weather").get("windspeed").asDouble();
-
-                            headerText.setText("WEATHER TODAY");
-                            temperatureText.setText("Temperature now = " + temperature + " C˚");
-                            temperatureMinText.setText("Temperature min = " + temperatureMin + " C˚");
-                            temperatureMaxText.setText("Temperature max = " + temperatureMax + " C˚");
-                            precipitationText.setText("Precipitation = " + precipitation + " mm");
-                            radiationText.setText("Radiation = " + radiation + " MJ/m2");
-                            windspeedText.setText("Wind speed now = " + windspeed + " km/h");
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                temperatureText.setText(error.toString());
-            }
-        });
-        //////////////////////////////////////////////////////////////////////////////////
-
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        headerText.setText("WEATHER TODAY");
+        temperatureText.setText("Temperature now = " + weatherStatus.getTemperature() + " C˚");
+        temperatureMinText.setText("Temperature min = " + weatherStatus.getTemperatureMin() + " C˚");
+        temperatureMaxText.setText("Temperature max = " + weatherStatus.getTemperatureMax() + " C˚");
+        precipitationText.setText("Precipitation = " + (int)weatherStatus.getPrecipitation() + " mm");
+        radiationText.setText("Radiation = " + (int)weatherStatus.getRadiation() + " MJ/m2");
+        windspeedText.setText("Wind speed now = " + weatherStatus.getWindspeed() + " km/h");
     }
 
-    public void getStatisticWebDataAndUpdateUI(String url)
-    {// Instantiate the RequestQueue.
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+    public void getStatisticWebDataAndUpdateUI() {
+
+        // todo
+        //  refactor naming conventions along with hidden attributes
+
 
         TextView headerText = (TextView) getView().findViewById(R.id.textviewHeader);
         TextView temperatureMinText = (TextView) getView().findViewById(R.id.textview1);
@@ -285,118 +183,13 @@ public class WeatherFragment extends Fragment {
         TextView radiationText = (TextView) getView().findViewById(R.id.textview5);
         TextView windspeedText = (TextView) getView().findViewById(R.id.textview6);
 
-
-
-        // Request a string response from the provided URL.
-        ///////////////////////////////////////////////////////////////////////////////
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-
-                        ObjectMapper mapper = new ObjectMapper();
-
-                        try {
-
-                            // convert JSON string to Map
-                            JsonNode responseMap = mapper.readTree(response);
-
-                            //Set texts
-                            double temperatureMin = 100;
-                            for (int i = 0; i < numOfDays; i++)
-                            {
-                                try {
-                                    double temp = responseMap.get("daily").get("temperature_2m_min").get(i).asDouble();
-                                    if (temperatureMin > temp)
-                                    {
-                                        temperatureMin = temp;
-                                    }
-                                }
-                                finally {
-
-                                }
-
-                            }
-
-                            double temperatureMax = -100;
-                            for (int i = 0; i < numOfDays; i++)
-                            {
-                                try {
-                                    double temp = responseMap.get("daily").get("temperature_2m_max").get(i).asDouble();
-                                    if (temperatureMax < temp)
-                                    {
-                                        temperatureMax = temp;
-                                    }
-                                }
-                                finally {
-
-                                }
-                            }
-
-                            double windspeed = -1;
-                            for (int i = 0; i < numOfDays; i++)
-                            {
-                                try {
-                                    double temp = responseMap.get("daily").get("windspeed_10m_max").get(i).asDouble();
-                                    if (windspeed < temp)
-                                    {
-                                        windspeed = temp;
-                                    }
-                                }
-                                finally {
-
-                                }
-
-                            }
-
-                            double precipitation = 0;
-                            double precipitationHours = 0;
-                            double radiation = 0;
-                            for (int i = 0; i < numOfDays; i++)
-                            {
-                                try {
-                                    precipitation += responseMap.get("daily").get("precipitation_sum").get(i).asDouble();
-                                }
-                                finally {
-
-                                }
-                                try {
-                                    precipitationHours += responseMap.get("daily").get("precipitation_hours").get(i).asDouble();
-                                }
-                                finally {
-
-                                }
-                                try {
-                                    radiation += responseMap.get("daily").get("shortwave_radiation_sum").get(i).asDouble();
-                                }
-                                finally {
-
-                                }
-                            }
-
-                            headerText.setText("WEATHER STATISTICS");
-                            temperatureMinText.setText("Temperature min = " + temperatureMin + " C˚");
-                            temperatureMaxText.setText("Temperature max = " + temperatureMax + " C˚");
-                            precipitationText.setText("Precipitation = " + (int)precipitation + " mm");
-                            precipitationHourlyText.setText("Precipitation in hours = " + (int)precipitationHours + " h");
-                            radiationText.setText("Radiation = " + (int)radiation + " MJ/m2");
-                            windspeedText.setText("Wind speed max = " + windspeed + " km/h");
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                temperatureMaxText.setText(dayStart);
-            }
-        });
-        //////////////////////////////////////////////////////////////////////////////////
-
-
-        // Add the request to the RequestQueue.
-        queue.add(stringRequest);
+        headerText.setText("WEATHER STATISTICS");
+        temperatureMinText.setText("Temperature min = " + weatherStatus.getTemperatureMin() + " C˚");
+        temperatureMaxText.setText("Temperature max = " + weatherStatus.getTemperatureMax() + " C˚");
+        precipitationText.setText("Precipitation = " + (int)weatherStatus.getPrecipitation() + " mm");
+        precipitationHourlyText.setText("Precipitation in hours = " + (int)weatherStatus.getPrecipitationHours() + " h");
+        radiationText.setText("Radiation = " + (int)weatherStatus.getRadiation() + " MJ/m2");
+        windspeedText.setText("Wind speed max = " + weatherStatus.getWindspeed() + " km/h");
     }
 
     private void initSpinnerFooter(List<String> fieldNames) {
@@ -425,7 +218,6 @@ public class WeatherFragment extends Fragment {
             }
         });
     }
-
 }
 
 

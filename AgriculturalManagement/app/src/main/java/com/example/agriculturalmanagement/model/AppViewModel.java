@@ -5,12 +5,14 @@ import android.os.Handler;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
 import com.example.agriculturalmanagement.model.dao.CropDao;
 import com.example.agriculturalmanagement.model.dao.FieldDao;
 import com.example.agriculturalmanagement.model.entities.Crop;
 import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.util.ResultReceiver;
+import com.example.agriculturalmanagement.model.entities.Crop;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -27,6 +29,7 @@ public class AppViewModel extends AndroidViewModel {
 
     public AppViewModel(Application application) {
         super(application);
+
         db = AppDatabase.getInstance(application);
         handler = new Handler(application.getMainLooper());
 
