@@ -106,6 +106,17 @@ public class AppViewModel extends AndroidViewModel {
         return calendarEventDao.getInRange(from, to);
     }
 
+    public LiveData<CalendarEvent> getCalendarEventById(int eventId) {
+        return calendarEventDao.getById(eventId);
+    }
+
+    public void deleteCalendarEventById(int eventId, ResultReceiver<Void> resultReceiver) {
+        doDbOperation(() -> {
+            calendarEventDao.deleteById(eventId);
+            return null;
+        }, resultReceiver);
+    }
+
     // the ResultReceiver callbacks are run on the main thread of the application
     private <T> void doDbOperation(Supplier<T> operation, ResultReceiver<T> resultReceiver) {
         db.execute(() -> {

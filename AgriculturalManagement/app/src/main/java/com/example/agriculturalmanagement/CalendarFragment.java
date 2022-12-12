@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,9 +44,10 @@ public class CalendarFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
+        var navController = Navigation.findNavController(view);
 
         adapter = new CalendarEventListAdapter(item -> {
-            // TODO
+            navController.navigate(CalendarFragmentDirections.actionCalendarDestToCalendarEventDest(item.getId()));
         });
 
         RecyclerView recyclerView = view.findViewById(R.id.calendar_event_list_recycler_view);
