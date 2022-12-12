@@ -54,6 +54,9 @@
         <action
             android:id="@+id/action_calendar_dest_to_calendar_event_dest"
             app:destination="@id/calendar_event_dest" />
+        <action
+            android:id="@+id/action_calendar_dest_to_new_calendar_event_dest"
+            app:destination="@id/new_calendar_event_dest" />
     </fragment>
 
     <fragment
@@ -134,5 +137,16 @@
         <argument
             android:name="eventId"
             app:argType="integer" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/new_calendar_event_dest"
+        android:name="com.example.agriculturalmanagement.NewCalendarEventFragment"
+        android:label="@string/event"
+        tools:layout="@layout/fragment_new_calendar_event" >
+        <argument
+            android:name="initialDate"
+            app:argType="long"
+            android:defaultValue="0L" />
     </fragment>
 </navigation>

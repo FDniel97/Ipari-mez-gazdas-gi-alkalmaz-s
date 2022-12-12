@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -14,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
@@ -29,6 +33,8 @@ public class CalendarFragment extends Fragment {
     private LiveData<List<CalendarEvent>> events;
     private CalendarEventListAdapter adapter;
     private AppViewModel viewModel;
+
+    private int selectedYear, selectedMonth, selectedDay;
 
     public CalendarFragment() { }
 
@@ -61,6 +67,9 @@ public class CalendarFragment extends Fragment {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
+                selectedYear = year;
+                selectedMonth = month;
+                selectedDay = dayOfMonth;
                 updateShownEvents(year, month, dayOfMonth);
                 Toast.makeText(requireContext(), String.format("%d-%d-%d", year, month, dayOfMonth), Toast.LENGTH_SHORT).show();
             }
@@ -68,9 +77,31 @@ public class CalendarFragment extends Fragment {
 
         {
             var d = new Date();
+            selectedYear = d.getYear() + 1900;
+            selectedMonth = d.getMonth();
+            selectedDay = d.getDate();
             updateShownEvents(d.getYear() + 1900, d.getMonth(), d.getDate());
             calendarView.setDate(d.getTime());
         }
+
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.calendar_menu, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_option_add_event) {
+                    navController.navigate(CalendarFragmentDirections.actionCalendarDestToNewCalendarEventDest().setInitialDate(
+                            new Date(selectedYear - 1900, selectedMonth, selectedDay).getTime()
+                    ));
+                    return true;
+                }
+
+                return false;
+            }
+        }, getViewLifecycleOwner());
     }
 
     private final Observer<List<CalendarEvent>> OBSERVER = newValue -> {
