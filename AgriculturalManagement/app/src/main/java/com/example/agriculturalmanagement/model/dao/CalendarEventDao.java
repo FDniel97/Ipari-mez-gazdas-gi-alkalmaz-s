@@ -14,6 +14,9 @@ public interface CalendarEventDao {
     @Query("SELECT * FROM calendar_events ORDER BY timestamp ASC")
     LiveData<List<CalendarEvent>> getAll();
 
+    @Query("SELECT * FROM calendar_events WHERE id = :eventId")
+    LiveData<CalendarEvent> getById(int eventId);
+
     @Query("SELECT * FROM calendar_events WHERE :from <= timestamp AND timestamp < :to ORDER BY timestamp ASC")
     LiveData<List<CalendarEvent>> getInRange(long from, long to);
 
@@ -22,4 +25,7 @@ public interface CalendarEventDao {
 
     @Query("DELETE FROM calendar_events")
     void deleteAll();
+
+    @Query("DELETE FROM calendar_events WHERE id = :eventId")
+    void deleteById(int eventId);
 }

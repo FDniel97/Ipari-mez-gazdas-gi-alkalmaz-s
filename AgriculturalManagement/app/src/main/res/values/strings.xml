@@ -23,4 +23,6 @@
     <string name="description">Description</string>
     <string name="edit">Edit</string>
     <string name="events_in_2_weeks">Events in the next two weeks</string>
+    <string name="event">Event</string>
+    <string name="datetime">Date &amp; time</string>
 </resources>

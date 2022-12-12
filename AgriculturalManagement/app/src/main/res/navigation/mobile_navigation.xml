@@ -51,6 +51,9 @@
         android:name="com.example.agriculturalmanagement.CalendarFragment"
         android:label="@string/calendar"
         tools:layout="@layout/fragment_calendar">
+        <action
+            android:id="@+id/action_calendar_dest_to_calendar_event_dest"
+            app:destination="@id/calendar_event_dest" />
     </fragment>
 
     <fragment
@@ -121,5 +124,15 @@
             android:name="cropId"
             app:argType="integer"
             android:defaultValue="0" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/calendar_event_dest"
+        android:name="com.example.agriculturalmanagement.CalendarEventFragment"
+        android:label="@string/event"
+        tools:layout="@layout/fragment_calendar_event" >
+        <argument
+            android:name="eventId"
+            app:argType="integer" />
     </fragment>
 </navigation>
