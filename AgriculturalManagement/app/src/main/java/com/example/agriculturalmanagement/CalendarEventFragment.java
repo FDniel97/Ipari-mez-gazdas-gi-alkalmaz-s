@@ -25,6 +25,7 @@ import com.example.agriculturalmanagement.databinding.FragmentCropDataBinding;
 import com.example.agriculturalmanagement.model.AppViewModel;
 import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.util.ResultReceiver;
+import com.google.android.material.card.MaterialCardView;
 
 import java.text.SimpleDateFormat;
 
@@ -110,5 +111,13 @@ public class CalendarEventFragment extends Fragment {
                 return false;
             }
         }, getViewLifecycleOwner());
+
+        {
+            MaterialCardView c = view.findViewById(R.id.calendar_event_field_name);
+            c.setOnClickListener(v -> {
+                if (field != null && field.getValue() != null)
+                    navController.navigate(CalendarEventFragmentDirections.actionCalendarEventDestToFieldDataDest(field.getValue().getId()));
+            });
+        }
     }
 }

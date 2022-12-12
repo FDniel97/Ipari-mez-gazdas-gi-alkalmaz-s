@@ -53,6 +53,7 @@
 
             <include
                 layout="@layout/include_text_card"
+                android:id="@+id/calendar_event_field_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardName='@{@string/field}'

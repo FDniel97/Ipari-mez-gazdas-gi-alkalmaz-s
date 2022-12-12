@@ -140,6 +140,9 @@
         <action
             android:id="@+id/action_calendar_event_dest_to_new_calendar_event_dest"
             app:destination="@id/new_calendar_event_dest" />
+        <action
+            android:id="@+id/action_calendar_event_dest_to_field_data_dest"
+            app:destination="@id/field_data_dest" />
     </fragment>
 
     <fragment
