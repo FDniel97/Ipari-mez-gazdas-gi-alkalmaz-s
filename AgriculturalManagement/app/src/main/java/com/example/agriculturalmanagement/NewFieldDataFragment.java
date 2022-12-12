@@ -40,6 +40,7 @@ import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.model.entities.PhysicalAddress;
 import com.example.agriculturalmanagement.newFieldData.AddressEditorFragment;
 import com.example.agriculturalmanagement.newFieldData.FieldShapeEditor;
+import com.example.agriculturalmanagement.util.ResultReceiver;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -493,7 +494,20 @@ public class NewFieldDataFragment extends Fragment {
                 validField = true;
                 if(validField){
 
-                    viewModel.insertField(newField);
+                    var resultReceiver = new ResultReceiver<Void>() {
+                        @Override
+                        public void onSuccess(Void value) {
+                            Toast.makeText(requireContext(), R.string.success, Toast.LENGTH_SHORT).show();
+                            Navigation.findNavController(view).popBackStack();
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(requireContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                        }
+                    };
+
+                    viewModel.insertField(newField, resultReceiver);
                     Navigation.findNavController(view).popBackStack();
                 }
                 else{

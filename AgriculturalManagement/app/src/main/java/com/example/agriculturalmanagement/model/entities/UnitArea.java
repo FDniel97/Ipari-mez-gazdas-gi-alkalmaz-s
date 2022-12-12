@@ -134,13 +134,16 @@ public class UnitArea extends GenArea{
     @Override
     public String toString() {
 
-        // todo
-        return "";
+        return areaSize + ":" + locationLongitude + ":" + locationLatitude;
     }
 
     @Override
     public void fromString(String rawData) {
 
-        // todo
+        String[] rawDataArr = rawData.split(":");
+
+        areaSize = Double.parseDouble(rawDataArr[0]);
+        locationLongitude = Double.parseDouble(rawDataArr[1]);
+        locationLatitude = Double.parseDouble(rawDataArr[2]);
     }
 }

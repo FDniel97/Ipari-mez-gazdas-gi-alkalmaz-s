@@ -44,7 +44,11 @@ public class Converters {
     // in this version there will be information loss
     @TypeConverter
     // using serialization
-    public static String GenArea2String(GenArea g) { return g.toString(); }
+    public static String GenArea2String(GenArea g) {
+
+        return "";//g.toString();
+
+    }
 
     @TypeConverter
     // using deserialization
@@ -57,7 +61,12 @@ public class Converters {
 
     @TypeConverter
     // using serialization
-    public static String GenAreaKey2String(GenAreaKey g) { return GenAreaKey.toString(g); }
+    public static String GenAreaKey2String(GenAreaKey g) {
+
+
+        return "";//GenAreaKey.toString(g);
+
+    }
 
     @TypeConverter
     // using deserialization

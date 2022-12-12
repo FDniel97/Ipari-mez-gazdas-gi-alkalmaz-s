@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,36 +17,37 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.agriculturalmanagement.model.AppViewModel;
 import com.example.agriculturalmanagement.model.WeatherStatus;
+import com.example.agriculturalmanagement.model.entities.Field;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class WeatherFragment extends Fragment {
 
     WeatherStatus weatherStatus;
 
-    private boolean isActual = true;
-    private Spinner dropdown;
-    private Button buttonActual;
-    private Button buttonStatistic;
-    //AppViewModel model = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
-    //LiveData<List<Field>> fields = model.getAllFields();
-
-    private String[] fieldNames = new String[]{"Herceghalom", "Tatabánya", " Csopak", "Szeged"};
-
-    private String fieldName = fieldNames[0];
-
-    private String dayStart = "2022-11-01";
-    private String dayToday = "2022-12-07";
+    private HashMap<String, Field> fieldsMap;
+    private List<String> fieldNames;
+    private String fieldName;
 
     private boolean isActual = true;
     private Spinner dropdown;
     private Button buttonActual;
     private Button buttonStatistic;
+
+    private String dayStart;
+    private String dayToday;
+    private int numOfDays;
 
     public WeatherFragment() {
         // Required empty public constructor
     }
-
-    //////////////////////////////////////////////////////////////////////
 
     private void setWeatherClassArguments()
     {
@@ -62,7 +64,7 @@ public class WeatherFragment extends Fragment {
             fieldsMap.put(field.getName(), field);
         }
 
-        if (fieldNames != null)
+        if (!fieldNames.isEmpty())
         {
             fieldName = fieldNames.get(0);
         }
@@ -83,7 +85,7 @@ public class WeatherFragment extends Fragment {
         LocalDateTime dateNow = LocalDateTime.now();
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        numOfDays = (int)ChronoUnit.DAYS.between(dateStart, dateNow);
+        numOfDays = (int) ChronoUnit.DAYS.between(dateStart, dateNow);
 
         dayStart = dateStart.format(dtf);
         dayToday = dateNow.format(dtf);
@@ -112,7 +114,8 @@ public class WeatherFragment extends Fragment {
         buttonActual.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 isActual = true;
-                getWebDataAndUpdateUI(fieldsMap.get(fieldName),isActual);
+                getWebDataAndUpdateUI(fieldsMap.get(fieldName).getLocationLatitude(),
+                        fieldsMap.get(fieldName).getLocationLongitude(), isActual);
             }
         });
 
@@ -120,7 +123,8 @@ public class WeatherFragment extends Fragment {
         buttonStatistic.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 isActual = false;
-                getWebDataAndUpdateUI(fieldsMap.get(fieldName),isActual);
+                getWebDataAndUpdateUI(fieldsMap.get(fieldName).getLocationLatitude(),
+                        fieldsMap.get(fieldName).getLocationLongitude(), isActual);
             }
         });
 
@@ -205,7 +209,8 @@ public class WeatherFragment extends Fragment {
                 fieldName = (String)text;
                 setDates();
 
-                getWebDataAndUpdateUI(fieldsMap.get(fieldName), isActual);
+                getWebDataAndUpdateUI(fieldsMap.get(fieldName).getLocationLatitude(),
+                        fieldsMap.get(fieldName).getLocationLongitude(), isActual);
 
                 int duration = Toast.LENGTH_SHORT;
                 Toast toast = Toast.makeText(context, text, duration);

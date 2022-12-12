@@ -118,9 +118,7 @@
         tools:layout="@layout/fragment_address_editor" >
         <action
             android:id="@+id/action_address_editor_dest_to_new_field_dest"
-            app:destination="@id/new_field_dest"
-            app:popUpTo="@+id/new_field_dest"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/new_field_dest" />
     </fragment>
     <fragment
         android:id="@+id/field_shape_editor_dest"
@@ -129,16 +127,16 @@
         tools:layout="@layout/fragment_field_shape_editor" >
         <action
             android:id="@+id/action_field_shape_editor_dest_to_new_field_dest"
-            app:destination="@id/new_field_dest"
-            app:popUpTo="@+id/new_field_dest"
-            app:popUpToInclusive="true" />
+            app:destination="@id/new_field_dest"/>
     </fragment>
     <fragment
         android:id="@+id/crop_selector_dest"
         android:name="com.example.agriculturalmanagement.newFieldData.SelectCropTypeDialog"
         android:label="Crop data selector"
-        android:id="@+id/action_crop_selector_dest_to_new_field_dest"
-        app:destination="@id/new_field_dest" />
+        tools:layout="@layout/fragment_select_crop_type_dialog">
+        <action
+            android:id="@+id/action_crop_selector_dest_to_new_field_dest"
+            app:destination="@id/new_field_dest" />
     </fragment>
     <fragment
         android:id="@+id/crop_data_dest"

@@ -2,8 +2,7 @@ package com.example.agriculturalmanagement.model;
 
 public class GenAreaKey extends ComparableKey<GenAreaKey> {
 
-    public Double val;
-
+    public Double val = 0.0;
 
     public GenAreaKey(Double val){
 

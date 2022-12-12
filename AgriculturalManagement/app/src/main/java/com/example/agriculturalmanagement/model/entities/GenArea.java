@@ -136,10 +136,15 @@ public class GenArea {
 
     public String toString() {
 
-        return "";
+        return areaSize + ":" + locationLongitude + ":" + locationLatitude;
     }
 
     public void fromString(String rawData) {
 
+        String[] rawDataArr = rawData.split(":");
+
+        areaSize = Double.parseDouble(rawDataArr[0]);
+        locationLongitude = Double.parseDouble(rawDataArr[1]);
+        locationLatitude = Double.parseDouble(rawDataArr[2]);
     }
 }
