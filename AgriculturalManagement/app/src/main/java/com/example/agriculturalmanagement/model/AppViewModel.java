@@ -56,6 +56,13 @@ public class AppViewModel extends AndroidViewModel {
         }, resultReceiver);
     }
 
+    public void insertField(Field field, ResultReceiver<Void> resultReceiver) {
+        doDbOperation(() -> {
+            fieldDao.insert(field);
+            return null;
+        }, resultReceiver);
+    }
+
     public LiveData<List<Crop>> getAllCrops() {
         return crops;
     }
