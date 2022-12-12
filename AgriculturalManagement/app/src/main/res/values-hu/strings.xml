@@ -24,4 +24,6 @@
     <string name="events_in_2_weeks">Események a következő két hétben</string>
     <string name="event">Esemény</string>
     <string name="datetime">Időpont</string>
+    <string name="new_event">Új esemény</string>
+    <string name="field">Föld</string>
 </resources>
