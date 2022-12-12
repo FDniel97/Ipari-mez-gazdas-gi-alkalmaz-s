@@ -55,6 +55,21 @@
                 layout="@layout/include_text_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardName='@{@string/field}'
+                app:cardText="@{viewModel.fieldName}"
+                app:cardBackgroundColorInt="@{@color/purple_100}" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp" >
+
+            <include
+                layout="@layout/include_text_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 app:cardName='@{@string/description}'
                 app:cardText="@{viewModel.desc}"
                 app:cardBackgroundColorInt="@{@color/purple_100}" />

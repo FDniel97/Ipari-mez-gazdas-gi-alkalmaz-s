@@ -14,13 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.agriculturalmanagement.databinding.FragmentCalendarEventBinding;
 import com.example.agriculturalmanagement.databinding.FragmentCropDataBinding;
 import com.example.agriculturalmanagement.model.AppViewModel;
+import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.util.ResultReceiver;
 
 import java.text.SimpleDateFormat;
@@ -28,7 +31,9 @@ import java.text.SimpleDateFormat;
 public class CalendarEventFragment extends Fragment {
     public MutableLiveData<String> name = new MutableLiveData<>();
     public MutableLiveData<String> datetime = new MutableLiveData<>();
+    public MutableLiveData<String> fieldName = new MutableLiveData<>();
     public MutableLiveData<String> desc = new MutableLiveData<>();
+    private LiveData<Field> field;
 
     public CalendarEventFragment() { }
 
@@ -55,6 +60,10 @@ public class CalendarEventFragment extends Fragment {
         var activity = (AppCompatActivity) requireActivity();
         var viewModel = new ViewModelProvider(activity).get(AppViewModel.class);
 
+        final Observer<Field> fieldObserver = item -> {
+            fieldName.setValue(item.getName());
+        };
+
         viewModel.getCalendarEventById(eventId).observe(getViewLifecycleOwner(), item -> {
             if (item == null)
                 return;
@@ -63,6 +72,12 @@ public class CalendarEventFragment extends Fragment {
             name.setValue(item.getName());
             datetime.setValue(DATE_FORMAT.format(item.getTimestamp()));
             desc.setValue(item.getDescription());
+
+            if (field != null)
+                field.removeObserver(fieldObserver);
+
+            field = viewModel.getFieldById(item.getFieldId());
+            field.observe(getViewLifecycleOwner(), fieldObserver);
         });
 
         activity.addMenuProvider(new MenuProvider() {
