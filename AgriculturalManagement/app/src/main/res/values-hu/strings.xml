@@ -21,4 +21,5 @@
     <string name="name">Név</string>
     <string name="description">Leírás</string>
     <string name="edit">Szerkesztés</string>
+    <string name="events_in_2_weeks">Események a következő két hétben</string>
 </resources>

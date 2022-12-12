@@ -12,15 +12,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.agriculturalmanagement.databinding.FragmentOverviewBinding;
 import com.example.agriculturalmanagement.model.AppViewModel;
 import com.google.android.material.card.MaterialCardView;
 
+import java.util.Date;
+
 public class OverviewFragment extends Fragment {
     public MutableLiveData<Integer> fieldCount = new MutableLiveData<>(0);
     public MutableLiveData<Integer> cropCount = new MutableLiveData<>(0);
+    public MutableLiveData<Integer> eventCount = new MutableLiveData<>(0);
 
     public OverviewFragment() { }
 
@@ -71,6 +73,23 @@ public class OverviewFragment extends Fragment {
                         .setRestoreState(true)
                         .build();
                 navController.navigate(OverviewFragmentDirections.actionOverviewDestToCropListDest(), navOptions);
+            });
+        }
+
+        {
+            var d = new Date();
+            viewModel.getCalendarEventsInRange(d.getTime(), d.getTime() + 14 * 24 * 3600 * 1000).observe(getViewLifecycleOwner(), newValue -> {
+                eventCount.setValue(newValue.size());
+            });
+
+            MaterialCardView c = view.findViewById(R.id.event_count_card);
+            c.setOnClickListener(v -> {
+                // https://stackoverflow.com/questions/71565073/why-does-navigation-not-work-in-the-navigation-drawer-activity-template-with-ver
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.overview_dest, false, true)
+                        .setRestoreState(true)
+                        .build();
+                navController.navigate(OverviewFragmentDirections.actionOverviewDestToCalendarDest(), navOptions);
             });
         }
     }

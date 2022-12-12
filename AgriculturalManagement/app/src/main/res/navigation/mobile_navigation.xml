@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_overview_dest_to_crop_list_dest"
             app:destination="@id/crop_list_dest" />
+        <action
+            android:id="@+id/action_overview_dest_to_calendar_dest"
+            app:destination="@id/calendar_dest" />
     </fragment>
 
 

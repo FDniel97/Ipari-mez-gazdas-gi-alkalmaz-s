@@ -53,7 +53,22 @@
                 app:cardName='@{@string/crops}'
                 app:cardNumber="@{viewModel.cropCount}"
                 app:cardBackgroundColorInt="@{@color/purple_100}" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="5dp" >
+
+            <include
+                layout="@layout/include_number_card"
+                android:id="@+id/event_count_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardName='@{@string/events_in_2_weeks}'
+                app:cardNumber="@{viewModel.eventCount}"
+                app:cardBackgroundColorInt="@{@color/purple_100}" />
         </LinearLayout>
     </LinearLayout>
 </layout>
