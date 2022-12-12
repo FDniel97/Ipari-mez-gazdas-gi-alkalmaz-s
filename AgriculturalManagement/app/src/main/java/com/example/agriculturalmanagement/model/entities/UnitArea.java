@@ -1,5 +1,8 @@
 package com.example.agriculturalmanagement.model.entities;
 
+import com.example.agriculturalmanagement.model.LinTreeMap;
+import com.example.agriculturalmanagement.model.GenAreaKey;
+
 import java.lang.String;
 import java.util.List;
 
@@ -7,7 +10,7 @@ public class UnitArea extends GenArea{
 
     public static List<UnitArea> unitAreas;
 
-    private static double minAreaLength = 0.0000179664;// above 2m
+    public static double minAreaLength = 0.0000179664;// above 2m
 
     private double areaWidth;
     private double areaHeight;
@@ -128,5 +131,16 @@ public class UnitArea extends GenArea{
         if(areaSize < minimalArea) throw new Exception("Computed area is too small.");
     }
 
+    @Override
+    public String toString() {
 
+        // todo
+        return "";
+    }
+
+    @Override
+    public void fromString(String rawData) {
+
+        // todo
+    }
 }

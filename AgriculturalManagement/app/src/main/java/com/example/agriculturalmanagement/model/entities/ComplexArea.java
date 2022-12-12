@@ -1,7 +1,13 @@
 package com.example.agriculturalmanagement.model.entities;
 
+import com.example.agriculturalmanagement.model.LinTreeMap;
+import com.example.agriculturalmanagement.model.GenAreaKey;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.lang.Exception;
 import java.lang.Math;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,6 +24,9 @@ public class ComplexArea {
 
     // linear storage of negative areas, also stores user defined negative areas
     private List<GenArea> genericSubtractUnitAreas;
+
+    private double longitude;
+    private double latitude;
 
     public ComplexArea(){
 
@@ -43,7 +52,6 @@ public class ComplexArea {
         this.genericSubtractUnitAreas = genericSubtractUnitAreas;
         this.subSize = genericSubtractUnitAreas.size();
     }
-
 
     public int getNumOfUnitAreas(){
 
@@ -180,9 +188,10 @@ public class ComplexArea {
 
     public void addGenArea(GenArea genUnitArea) throws Exception{
 
-        if(size < 3){
+        if(size == 0){
 
             genericUnitAreas.add(genUnitArea);
+            ++size;
         }
         else{
 
@@ -215,7 +224,7 @@ public class ComplexArea {
     /* !@brief Creates intersection area from two unit areas in order to form a subtraction area.
     /*  This is due to resolve area duplication in case of overlapping unit areas.
     */
-    public void intersectUnitAreas(GenArea genUnitArea) throws Exception{
+    private void intersectUnitAreas(GenArea genUnitArea) throws Exception{
 
         //GenArea genIArea;// member as a "reference"
         LinTreeMap<GenAreaKey, POI> rawPoints;
@@ -223,8 +232,6 @@ public class ComplexArea {
         // store the alternating index boundaries of border of negative and positive area pairs
         LinkedList<GenAreaKey> overlapRedundancy;
         boolean firstPointWasInner = false;
-
-
 
         rawPoints = new LinTreeMap<GenAreaKey, POI>();
         // to use sieve method at areal subtraction
@@ -385,8 +392,6 @@ public class ComplexArea {
                         rawPoints.getByInd(j).lat - genIArea.getLatitude(),
                         rawPoints.getByInd(j).lon - genIArea.getLongitude()));
 
-
-
                 cmpAngLow = genIArea.coords.higherKey(tmpAng);
                 cmpAngHigh = genIArea.coords.lowerKey(rawPoints.getKeyByInd(intersectInd));
                 int k = genIArea.coords.getIndByKey(cmpAngLow);
@@ -417,14 +422,6 @@ public class ComplexArea {
     }
 
 
-    public void validateUnitAreaPair(GenArea areaA, GenArea areaB){
-
-        // intersection examination
-        // TODO
-    }
-
-
-
     /*public void validateUnitAreas(List<GenArea> genericUnitAreas) throws Exception{
 
         // TODO...
@@ -446,16 +443,26 @@ public class ComplexArea {
     }
     */
 
-    private void computeComplexArea() throws Exception{
+    public void generateComplexArea() throws Exception{
 
         areaSize = 0.0;// set value to null and restart computation involving all unit area
+        longitude = 0.0;
+        latitude = 0.0;
 
         // adding all unit areas together
+        GenArea genericUnitArea;
+
         for(int i = 0; i < size; ++i){
 
-            genericUnitAreas.get(i).computeUnitAreaSize();
-            areaSize += genericUnitAreas.get(i).size();
+            genericUnitArea = genericUnitAreas.get(i);
+            genericUnitArea.computeUnitAreaSize();
+            areaSize += genericUnitArea.size();
+            longitude += genericUnitArea.getLongitude();
+            latitude += genericUnitArea.getLatitude();
         }
+
+        longitude /= size;
+        latitude /= size;
 
         // TODO
         //  expands this methods according to inclusion-exclusion principle
@@ -466,6 +473,142 @@ public class ComplexArea {
             genericSubtractUnitAreas.get(i).computeUnitAreaSize();
             areaSize -= genericUnitAreas.get(i).size();
         }
+    }
+
+    public int getSize() {
+
+        return size;
+    }
+
+    public void setSize(int size) {
+
+        this.size = size;
+    }
+
+    public double getAreaSize() {
+
+        return areaSize;
+    }
+
+    public void setAreaSize(double areaSize) {
+
+        this.areaSize = areaSize;
+    }
+
+    public List<GenArea> getGenericUnitAreas() {
+
+        return genericUnitAreas;
+    }
+
+    public void setGenericUnitAreas(List<GenArea> genericUnitAreas) {
+
+        this.genericUnitAreas = genericUnitAreas;
+    }
+
+    public int getSubSize() {
+
+        return subSize;
+    }
+
+    public void setSubSize(int subSize) {
+
+        this.subSize = subSize;
+    }
+
+    public List<GenArea> getGenericSubtractUnitAreas() {
+
+        return genericSubtractUnitAreas;
+    }
+
+    public void setGenericSubtractUnitAreas(List<GenArea> genericSubtractUnitAreas) {
+
+        this.genericSubtractUnitAreas = genericSubtractUnitAreas;
+    }
+
+    public double getLongitude() {
+
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+
+        this.longitude = longitude;
+    }
+
+    public double getLatitude() {
+
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+
+        this.latitude = latitude;
+    }
+
+    public GenAreaKey getCmpAngLow() {
+
+        return cmpAngLow;
+    }
+
+    public void setCmpAngLow(GenAreaKey cmpAngLow) {
+
+        this.cmpAngLow = cmpAngLow;
+    }
+
+    public GenAreaKey getCmpAngHigh() {
+
+        return cmpAngHigh;
+    }
+
+    public void setCmpAngHigh(GenAreaKey cmpAngHigh) {
+
+        this.cmpAngHigh = cmpAngHigh;
+    }
+
+    public GenArea getGenIArea() {
+
+        return genIArea;
+    }
+
+    public void setGenIArea(GenArea genIArea) {
+
+        this.genIArea = genIArea;
+    }
+
+    public double getIntersectSectResultX() {
+
+        return intersectSectResultX;
+    }
+
+    public void setIntersectSectResultX(double intersectSectResultX) {
+
+        this.intersectSectResultX = intersectSectResultX;
+    }
+
+    public double getIntersectSectResultY() {
+
+        return intersectSectResultY;
+    }
+
+    public void setIntersectSectResultY(double intersectSectResultY) {
+
+        this.intersectSectResultY = intersectSectResultY;
+    }
+
+    public String toString() {
+
+        return areaSize + ":" + longitude + ":" + latitude;
+    }
+
+    public void fromString(String rawData) throws Exception {
+
+        String[] rawDataArr = rawData.split(":");
+
+        if(rawDataArr.length != 3) throw new Exception("Ill conditioned raw data.");
+
+        areaSize = Double.parseDouble(rawDataArr[0]);
+        longitude = Double.parseDouble(rawDataArr[1]);
+        latitude = Double.parseDouble(rawDataArr[2]);
     }
 }
 

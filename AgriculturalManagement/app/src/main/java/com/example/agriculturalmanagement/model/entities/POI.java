@@ -11,6 +11,13 @@ public class POI{
     public double lat;
     public int overlapDir;// vertex count of clockwise backward overlap in order to determine positive areas
 
+    public POI(){
+
+        ang = 0.0;
+        lon = 0.0;
+        lat = 0.0;
+        overlapDir = 0;
+    }
 
     public POI(String rawData) throws Exception{
 

@@ -1,5 +1,7 @@
 package com.example.agriculturalmanagement.model.entities;
 
+import com.example.agriculturalmanagement.model.LinTreeMap;
+import com.example.agriculturalmanagement.model.GenAreaKey;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +14,7 @@ import java.util.TreeMap;
 import java.lang.Exception;
 import java.lang.Math;
 
-
-
 public class GenArea {
-
-
 
     protected double locationLongitude;// aggregated and weighthened central position
     protected double locationLatitude;// aggregated and weighthened central position
@@ -91,6 +89,7 @@ public class GenArea {
         return coords.getByInd(coordOrder.get(i));
     }
 
+
     /*! @brief Sets a new longitudinal coordinate value to unit area. The fixedStartLocation indicates
      *    whether a fixed size scaling or a moving unit area is the case.
      * */
@@ -132,6 +131,15 @@ public class GenArea {
 
     public void computeUnitAreaSize() throws Exception{
 
+
+    }
+
+    public String toString() {
+
+        return "";
+    }
+
+    public void fromString(String rawData) {
 
     }
 }

@@ -2,7 +2,7 @@ package com.example.agriculturalmanagement;
 
 import static org.junit.Assert.*;
 
-import com.example.agriculturalmanagement.model.UnitArea;
+import com.example.agriculturalmanagement.model.entities.UnitArea;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,9 +20,6 @@ public class UnitAreaUnitTests {
 
     @Test
     public void constructors_areCorrect() throws Exception{
-
-        // empty initialization
-        UnitArea testObject = new UnitArea();
 
         // explicit initialization with width range error
         assertEquals("New value of area width is too small.",
@@ -79,7 +76,9 @@ public class UnitAreaUnitTests {
 
 
         // nominal initialization
-        testObject = new UnitArea(100.0, 100.0, 30.0, 40.0);
+
+        // empty initialization
+        UnitArea testObject = new UnitArea(100.0, 100.0, 30.0, 40.0);
     }
 
 
@@ -111,7 +110,7 @@ public class UnitAreaUnitTests {
     @Test
     public void setters_areCorrect() throws Exception{
 
-        UnitArea testObject = new UnitArea();
+        UnitArea testObject = new UnitArea(1.0, 1.0, 0.0, 0.0);
 
         // setAreaWidth : lower bound violation
         assertEquals("New value of area width is too small.",

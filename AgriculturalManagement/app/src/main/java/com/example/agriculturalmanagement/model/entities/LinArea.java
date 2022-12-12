@@ -1,5 +1,8 @@
 package com.example.agriculturalmanagement.model.entities;
 
+import com.example.agriculturalmanagement.model.LinTreeMap;
+import com.example.agriculturalmanagement.model.GenAreaKey;
+
 import java.lang.String;
 import java.lang.Exception;
 import java.lang.Math;
@@ -7,7 +10,7 @@ import java.lang.Math;
 public class LinArea extends GenArea{
 
     private boolean initialized = false;
-    private static double equivalenceThreshold = 0.2;// in unit value
+    private static double equivalenceThreshold = 0.0000179664;// above 2m, in unit value
     private String rawCoords;// serialized form of POIs in order to reduce complexity of database
 
     public LinArea(){
@@ -136,11 +139,6 @@ public class LinArea extends GenArea{
         }
 
         coords.sort();
-        System.out.println("((((((((((((");
-        for(int i = 0; i < size; ++i){
-
-            System.out.println(coords.getKeyByInd(i).val + "!!" + coords.getByInd(i).ang);
-        }
     }
 
     @Override
@@ -165,8 +163,8 @@ public class LinArea extends GenArea{
 
             dist = Math.sqrt(Math.pow(lonVal - coords.getByInd(i).lon, 2) + Math.pow(latVal - coords.getByInd(i).lat, 2));
 
-            if(dist < equivalenceThreshold)
-                throw new Exception("Given coordinate is close to one of existing coordinate.");
+            //if(dist < equivalenceThreshold)
+            //    throw new Exception("Given coordinate is close to one of existing coordinate.");
         }
 
         // unity check (assumption: the geometry is defined by a graph route)
@@ -253,11 +251,11 @@ public class LinArea extends GenArea{
                         }
 
                         overlapDir = (-1) * (size - i);
-                    } else {
+                    } /*else {
                         // intersection occurs
                         throw new Exception("The current section intersects one of the previous "
                                 + "sections, please select another point.");
-                    }
+                    }*/
 
                     break;
                 }
@@ -286,7 +284,8 @@ public class LinArea extends GenArea{
         if(size < 3) throw new Exception("Number of POIs is too small to compute area "
                 + "(Size must be greater than 2).");
 
-        if(checkLoop()) throw new Exception("Area border is not closed.");
+        //if(checkLoop()) throw new Exception("Area border is not closed.");
+
 
         areaSize = 0.0;// recalculating area
 
@@ -340,5 +339,18 @@ public class LinArea extends GenArea{
     public GenAreaKey getLowerAng(GenAreaKey key) throws Exception{
 
         return coords.lowerKey(key);
+    }
+
+    @Override
+    public String toString() {
+
+        // todo
+        return "";
+    }
+
+    @Override
+    public void fromString(String rawData) {
+
+        // todo
     }
 }

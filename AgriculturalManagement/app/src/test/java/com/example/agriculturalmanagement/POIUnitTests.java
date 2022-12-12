@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import org.junit.Test;
 
-import com.example.agriculturalmanagement.model.POI;
+import com.example.agriculturalmanagement.model.entities.POI;
 
 
 public class POIUnitTests {
