@@ -26,4 +26,5 @@
     <string name="datetime">Időpont</string>
     <string name="new_event">Új esemény</string>
     <string name="field">Föld</string>
+    <string name="events">Események</string>
 </resources>

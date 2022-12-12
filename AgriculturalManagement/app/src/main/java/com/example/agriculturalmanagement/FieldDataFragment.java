@@ -20,6 +20,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,6 +34,7 @@ import com.example.agriculturalmanagement.databinding.FragmentFieldDataBinding;
 import com.example.agriculturalmanagement.databinding.FragmentOverviewBinding;
 import com.example.agriculturalmanagement.model.AppViewModel;
 import com.example.agriculturalmanagement.model.entities.Field;
+import com.example.agriculturalmanagement.model.entities.FieldWithCropAndEvents;
 import com.example.agriculturalmanagement.util.ResultReceiver;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,47 +47,8 @@ import java.util.List;
 
 public class FieldDataFragment extends Fragment {
     public MutableLiveData<Integer> fieldCount = new MutableLiveData<>(0);
-    public int fieldID;
-    private Field field;
-
 
     public FieldDataFragment() { }
-
-    private void setField()
-    {
-        var viewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
-        var allFieldsLiveData = viewModel.getAllFields();
-        var fields = allFieldsLiveData.getValue();
-
-        for (int i = 0; i < fields.size(); i++)
-        {
-            Field f = fields.get(i);
-            if (f.getId() == fieldID)
-            {
-                field = f;
-            }
-        }
-    }
-
-    public void setUI()
-    {
-        TextView name = (TextView) getView().findViewById(R.id.field_name);
-        TextView longitude = (TextView) getView().findViewById(R.id.longitude);
-        TextView latitude = (TextView) getView().findViewById(R.id.latitude);
-        TextView cropType = (TextView) getView().findViewById(R.id.cropType);
-
-        name.setText("Name: " + field.getName());
-        longitude.setText(String.valueOf("Longitude= " + field.getLocationLongitude()));
-        latitude.setText(String.valueOf("Latitude= " + field.getLocationLatitude()));
-        try {
-            cropType.setText("Crop type: " + field.getCropType());
-        }
-        catch (Exception e)
-        {
-            cropType.setText("None");
-        }
-
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,20 +67,12 @@ public class FieldDataFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         view.getBackground().setAlpha(180);
         var args = FieldDataFragmentArgs.fromBundle(getArguments());
-        fieldID = args.getFieldId();
-
-        setField();
-        setUI();
 
         var navController = Navigation.findNavController(view);
 
         var activity = (AppCompatActivity) requireActivity();
 
         var viewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
-
-        viewModel.getAllFields().observe(getViewLifecycleOwner(), newValue -> {
-            fieldCount.setValue(updateTemperature());
-        });
 
         {
             MaterialCardView c = view.findViewById(R.id.field_weather_card);
@@ -129,14 +86,6 @@ public class FieldDataFragment extends Fragment {
 
             });
         }
-        // activity.getSupportActionBar().setTitle("#" + args.getFieldId());
-
-        viewModel.getFieldById(args.getFieldId()).observe(getViewLifecycleOwner(), field -> {
-            if (field == null)
-                return;
-
-            activity.getSupportActionBar().setTitle(field.getName());
-        });
 
         activity.addMenuProvider(new MenuProvider() {
             @Override
@@ -166,12 +115,48 @@ public class FieldDataFragment extends Fragment {
                 return false;
             }
         }, getViewLifecycleOwner());
+
+        var adapter = new CalendarEventListAdapter(item -> {
+            navController.navigate(FieldDataFragmentDirections.actionFieldDataDestToCalendarEventDest(item.getId()));
+        });
+
+        RecyclerView recyclerView = view.findViewById(R.id.field_event_recycler_view);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.setAdapter(adapter);
+
+        viewModel.getFieldWithCropAndEventsById(args.getFieldId()).observe(getViewLifecycleOwner(), item -> {
+            if (item == null)
+                return;
+
+            activity.getSupportActionBar().setTitle(item.field.getName());
+            adapter.submitList(item.events);
+
+            setUI(item);
+            updateTemperature(item.field);
+        });
     }
 
-    int updateTemperature() {
+    private void setUI(FieldWithCropAndEvents data)
+    {
+        TextView name = (TextView) getView().findViewById(R.id.field_name);
+        TextView longitude = (TextView) getView().findViewById(R.id.longitude);
+        TextView latitude = (TextView) getView().findViewById(R.id.latitude);
+        TextView cropType = (TextView) getView().findViewById(R.id.cropType);
 
-        final double[] temperature = {0};
+        name.setText("Name: " + data.field.getName());
+        longitude.setText("Longitude= " + data.field.getLocationLongitude());
+        latitude.setText("Latitude= " + data.field.getLocationLatitude());
+        try {
+            cropType.setText("Crop type: " + data.crop.getName());
+        }
+        catch (Exception e)
+        {
+            cropType.setText("None");
+        }
+    }
 
+    private void updateTemperature(Field field) {
         double latitude = field.getLocationLatitude();
         double longitude = field.getLocationLongitude();
         String url = String.format("https://api.open-meteo.com/v1/forecast?latitude=" +
@@ -193,32 +178,26 @@ public class FieldDataFragment extends Fragment {
                         ObjectMapper mapper = new ObjectMapper();
 
                         try {
-
                             // convert JSON string to Map
                             JsonNode responseMap = mapper.readTree(response);
 
                             //Set texts
                             double temp = responseMap.get("current_weather").get("temperature").asDouble();
                             fieldCount.setValue((int)temp);
-                            temperature[0] = (int)temp;
-
-
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
 
-            }
+                    }
         });
         //////////////////////////////////////////////////////////////////////////////////
 
-
         // Add the request to the RequestQueue.
-            queue.add(stringRequest);
-            return (int) temperature[0];
+        queue.add(stringRequest);
     }
 
 }
