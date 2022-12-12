@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.example.agriculturalmanagement.model.entities.CalendarEvent;
 
@@ -22,6 +23,9 @@ public interface CalendarEventDao {
 
     @Insert
     void insert(CalendarEvent calendarEvent);
+
+    @Update
+    void update(CalendarEvent calendarEvent);
 
     @Query("DELETE FROM calendar_events")
     void deleteAll();

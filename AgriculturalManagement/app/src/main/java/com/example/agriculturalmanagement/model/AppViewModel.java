@@ -124,6 +124,13 @@ public class AppViewModel extends AndroidViewModel {
         }, resultReceiver);
     }
 
+    public void updateCalendarEvent(CalendarEvent event, ResultReceiver<Void> resultReceiver) {
+        doDbOperation(() -> {
+            calendarEventDao.update(event);
+            return null;
+        }, resultReceiver);
+    }
+
     // the ResultReceiver callbacks are run on the main thread of the application
     private <T> void doDbOperation(Supplier<T> operation, ResultReceiver<T> resultReceiver) {
         db.execute(() -> {

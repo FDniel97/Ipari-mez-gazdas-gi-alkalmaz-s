@@ -11,6 +11,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
@@ -28,6 +30,7 @@ import android.widget.Toast;
 import com.example.agriculturalmanagement.model.AppViewModel;
 import com.example.agriculturalmanagement.model.entities.CalendarEvent;
 import com.example.agriculturalmanagement.model.entities.Crop;
+import com.example.agriculturalmanagement.model.entities.Field;
 import com.example.agriculturalmanagement.util.ResultReceiver;
 
 import java.text.ParseException;
@@ -37,7 +40,10 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 public class NewCalendarEventFragment extends Fragment {
+    private CalendarEvent editedEntity;
     private int selectedFieldId;
+    private EditText dateField;
+    private LiveData<Field> field;
 
     public NewCalendarEventFragment() { }
 
@@ -59,7 +65,7 @@ public class NewCalendarEventFragment extends Fragment {
         var navController = Navigation.findNavController(view);
 
         EditText nameField = view.findViewById(R.id.new_calendar_event_name);
-        EditText dateField = view.findViewById(R.id.new_calendar_event_datetime);
+        dateField = view.findViewById(R.id.new_calendar_event_datetime);
         EditText fieldField = view.findViewById(R.id.new_calendar_event_field);
         EditText descField = view.findViewById(R.id.new_calendar_event_description);
 
@@ -78,25 +84,58 @@ public class NewCalendarEventFragment extends Fragment {
             builder.show();
         });
 
-        Date d;
-        if (args.getInitialDate() > 0) {
-            d = new Date(args.getInitialDate());
-        } else {
-            d = new Date();
+        var eventId = args.getEventId();
+
+        if (eventId > 0) {
+            nameField.setEnabled(false);
+            dateField.setEnabled(false);
+            fieldField.setEnabled(false);
+            descField.setEnabled(false);
+
+            final Observer<Field> fieldObserver = item -> {
+                nameField.setText(editedEntity.getName());
+                dateField.setText(DATE_FORMAT.format(editedEntity.getTimestamp()));
+                descField.setText(editedEntity.getDescription());
+
+                fieldField.setText(item.getName());
+                selectedFieldId = item.getId();
+
+                nameField.setEnabled(true);
+                dateField.setEnabled(true);
+                fieldField.setEnabled(true);
+                descField.setEnabled(true);
+
+                dateField.setOnClickListener(v -> {
+                    showDateTimePickers(editedEntity.getTimestamp());
+                });
+            };
+
+            viewModel.getCalendarEventById(eventId).observe(getViewLifecycleOwner(), item -> {
+                if (editedEntity != null)
+                    return;
+
+                editedEntity = item;
+
+                if (field != null)
+                    field.removeObserver(fieldObserver);
+
+                field = viewModel.getFieldById(item.getFieldId());
+                field.observe(getViewLifecycleOwner(), fieldObserver);
+            });
         }
+        else {
+            Date d;
+            if (args.getInitialDate() > 0) {
+                d = new Date(args.getInitialDate());
+            } else {
+                d = new Date();
+            }
 
-        dateField.setText(DATE_FORMAT.format(d));
-
-        dateField.setOnClickListener(v -> {
-            var dateDialog = new DatePickerDialog(requireContext(), (view1, year, month, dayOfMonth) -> {
-                var timeDialog = new TimePickerDialog(requireContext(), (view2, hourOfDay, minute) -> {
-                    var selectedDate = new Date(year - 1900, month, dayOfMonth, hourOfDay, minute);
-                    dateField.setText(DATE_FORMAT.format(selectedDate));
-                }, d.getHours(), d.getMinutes(), true);
-                timeDialog.show();
-            }, d.getYear() + 1900, d.getMonth(), d.getDate());
-            dateDialog.show();
-        });
+            dateField.setText(DATE_FORMAT.format(d));
+            dateField.setOnClickListener(v -> {
+                showDateTimePickers(d);
+            });
+        }
 
         activity.addMenuProvider(new MenuProvider() {
             @Override
@@ -126,8 +165,11 @@ public class NewCalendarEventFragment extends Fragment {
                         };
 
                         try {
-                            var event = new CalendarEvent(0, selectedFieldId, name, DATE_FORMAT.parse(datetime), desc);
-                            viewModel.insertCalendarEvent(event, resultReceiver);
+                            var event = new CalendarEvent(eventId, selectedFieldId, name, DATE_FORMAT.parse(datetime), desc);
+                            if (eventId > 0)
+                                viewModel.updateCalendarEvent(event, resultReceiver);
+                            else
+                                viewModel.insertCalendarEvent(event, resultReceiver);
                         } catch (ParseException e) {
                             resultReceiver.onFailure(e);
                         }
@@ -139,5 +181,16 @@ public class NewCalendarEventFragment extends Fragment {
                 return false;
             }
         }, getViewLifecycleOwner());
+    }
+
+    private void showDateTimePickers(Date d) {
+        var dateDialog = new DatePickerDialog(requireContext(), (view1, year, month, dayOfMonth) -> {
+            var timeDialog = new TimePickerDialog(requireContext(), (view2, hourOfDay, minute) -> {
+                var selectedDate = new Date(year - 1900, month, dayOfMonth, hourOfDay, minute);
+                dateField.setText(DATE_FORMAT.format(selectedDate));
+            }, d.getHours(), d.getMinutes(), true);
+            timeDialog.show();
+        }, d.getYear() + 1900, d.getMonth(), d.getDate());
+        dateDialog.show();
     }
 }

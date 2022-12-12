@@ -74,7 +74,7 @@ public class CalendarEventFragment extends Fragment {
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.menu_option_edit_event) {
-                    // TODO
+                    navController.navigate(CalendarEventFragmentDirections.actionCalendarEventDestToNewCalendarEventDest().setEventId(eventId));
                 } else if (menuItem.getItemId() == R.id.menu_option_delete_event) {
                     viewModel.deleteCalendarEventById(eventId, new ResultReceiver<>() {
                         @Override

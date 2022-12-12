@@ -137,6 +137,9 @@
         <argument
             android:name="eventId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_calendar_event_dest_to_new_calendar_event_dest"
+            app:destination="@id/new_calendar_event_dest" />
     </fragment>
 
     <fragment
@@ -148,5 +151,9 @@
             android:name="initialDate"
             app:argType="long"
             android:defaultValue="0L" />
+        <argument
+            android:name="eventId"
+            app:argType="integer"
+            android:defaultValue="0" />
     </fragment>
 </navigation>
