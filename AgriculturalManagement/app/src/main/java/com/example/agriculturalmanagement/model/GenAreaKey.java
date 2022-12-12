@@ -54,4 +54,14 @@ public class GenAreaKey extends ComparableKey<GenAreaKey> {
 
         return new GenAreaKey(this.val - key.val);
     }
+
+    public static String toString(GenAreaKey key) {
+
+        return "" + key.val;
+    }
+
+    public static GenAreaKey fromString(String rawData) {
+
+        return new GenAreaKey(Double.parseDouble(rawData));
+    }
 }
