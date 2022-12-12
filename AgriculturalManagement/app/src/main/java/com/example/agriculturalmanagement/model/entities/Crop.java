@@ -24,7 +24,9 @@ public class Crop {
     private double quantity;
     private int price;
 
+
     public Crop(int id, @NonNull String name, @NonNull String description, double quantity, int price) {
+
         this.id = id;
         this.name = name;
         this.description = description;

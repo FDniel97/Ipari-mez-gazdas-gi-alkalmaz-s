@@ -19,5 +19,6 @@ public class FieldWithCropAndEvents {
             parentColumn = "id",
             entityColumn = "fieldId"
     )
+
     public List<CalendarEvent> events;
 }
