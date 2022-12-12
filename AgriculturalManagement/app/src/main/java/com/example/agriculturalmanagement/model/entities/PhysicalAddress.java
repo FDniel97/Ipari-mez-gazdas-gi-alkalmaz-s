@@ -5,7 +5,7 @@ import java.lang.Exception;
 
 public class PhysicalAddress {
 
-    private int zipCode;
+    private String zipCode;
     private String country;
     private String municipality;
     private String city;
@@ -14,7 +14,20 @@ public class PhysicalAddress {
     private String number;
     private String parcelNumber;
 
-    public PhysicalAddress(int zipCode, String country, String municipality, String city, String district,
+    public PhysicalAddress(){
+
+        zipCode = "";
+        country = "";
+        municipality = "";
+        city = "";
+        district = "";
+        street = "";
+        number = "";
+        parcelNumber = "";
+
+    }
+
+    public PhysicalAddress(String zipCode, String country, String municipality, String city, String district,
                            String street, String number, String parcelNumber) throws Exception {
 
         setZipCode(zipCode);
@@ -29,14 +42,14 @@ public class PhysicalAddress {
 
         setStreet(street);
 
-        setNumber(number, parcelNumber);
+        setNumber(number);
 
         setParcelNumber(parcelNumber);
     }
 
     // GETTER METHODS FOR MEMBERS
 
-    public int getZipCode() {
+    public String getZipCode() {
 
         return zipCode;
     }
@@ -79,9 +92,9 @@ public class PhysicalAddress {
     // SETTER METHODS FOR MEMBERS
 
 
-    public void setZipCode(int zipCode) throws Exception{
+    public void setZipCode(String zipCode) throws Exception{
 
-        if(zipCode < 0) throw new Exception("Zip code is negative.");
+        if(zipCode.isEmpty()) throw new Exception("Zip code is empty.");
         else this.zipCode = zipCode;
     }
 
@@ -116,11 +129,11 @@ public class PhysicalAddress {
         this.street = street;
     }
 
-    public void setNumber(String number, String parcelNumber) throws Exception{
+
+    public void setNumber(String number) throws Exception{
 
         // can be null in case of existing parcel number
-        if(number.isEmpty() && !parcelNumber.isEmpty()) this.number = "";
-        else if(parcelNumber.isEmpty()) throw new Exception("Number is empty");
+        if(number.isEmpty()) throw new Exception("Number is empty");
         else this.number = number;
     }
 
@@ -128,5 +141,27 @@ public class PhysicalAddress {
 
         if(parcelNumber.isEmpty()) throw new Exception("Parcel number is empty.");
         this.parcelNumber = parcelNumber;
+    }
+
+    public String toString() {
+
+        return zipCode + ":" + country + ":" + municipality + ":" + city + ":" + district + ":" +
+                street + ":" + number + ":" + parcelNumber;
+    }
+
+    public void fromString(String rawData) throws Exception {
+
+        String[] rawDataArr = rawData.split(":");
+
+        if(rawDataArr.length != 8) throw new Exception("Ill conditioned data during deserialization.");
+
+        zipCode = rawDataArr[0];
+        country = rawDataArr[1];
+        municipality = rawDataArr[2];
+        city = rawDataArr[3];
+        district = rawDataArr[4];
+        street = rawDataArr[5];
+        number = rawDataArr[6];
+        parcelNumber = rawDataArr[7];
     }
 }

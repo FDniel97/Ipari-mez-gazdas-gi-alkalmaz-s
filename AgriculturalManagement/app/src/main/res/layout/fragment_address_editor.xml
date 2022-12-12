@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragmentAddressEditor"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".newFieldData.AddressEditorFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#eeeeee">
+
+        <!-- physical address -->
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <!-- todo zip code based country, municipality and city lookup from external source -->
+            <EditText
+                android:id="@+id/zipCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="0123456789"
+                android:maxLength="20"
+                android:text="Zip code"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- todo country name lookup from external source -->
+            <EditText
+                android:id="@+id/country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyzAÁBCDEEFGHIÍJKLEÉMNOÓÖŐPQRSTUÚÖŰVWXYZ0123456789()-"
+                android:maxLength="100"
+                android:text="Country"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- todo municipality name lookup from external source -->
+            <EditText
+                android:id="@+id/municipality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyzAÁBCDEEFGHIÍJKLEÉMNOÓÖŐPQRSTUÚÖŰVWXYZ0123456789()-"
+                android:maxLength="100"
+                android:text="Municipality"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- todo district name lookup from external source -->
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyzAÁBCDEEFGHIÍJKLEÉMNOÓÖŐPQRSTUÚÖŰVWXYZ0123456789()-"
+                android:maxLength="100"
+                android:text="City"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- todo district name lookup from external source -->
+            <EditText
+                android:id="@+id/district"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyzAÁBCDEEFGHIÍJKLEÉMNOÓÖŐPQRSTUÚÖŰVWXYZ0123456789()-"
+                android:maxLength="100"
+                android:text="District"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- todo street name lookup from external source -->
+            <EditText
+                android:id="@+id/street"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyzAÁBCDEEFGHIÍJKLEÉMNOÓÖŐPQRSTUÚÖŰVWXYZ0123456789()-"
+                android:maxLength="100"
+                android:text="Street"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- todo number name lookup from external source (optional autofill improvement) -->
+            <EditText
+                android:id="@+id/number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyzAÁBCDEEFGHIÍJKLEÉMNOÓÖŐPQRSTUÚÖŰVWXYZ0123456789()-"
+                android:maxLength="100"
+                android:text="Number"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- todo parcel number name lookup from external source (optional autofill improvement)-->
+            <EditText
+                android:id="@+id/parcelNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:inputType="text"
+                android:digits="aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyzAÁBCDEEFGHIÍJKLEÉMNOÓÖŐPQRSTUÚÖŰVWXYZ0123456789()-"
+                android:maxLength="100"
+                android:text="Parcel number"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/setAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="#444444"
+                android:text="SET ADDRESS" />
+        </TableRow>
+
+    </LinearLayout>
+
+</FrameLayout>

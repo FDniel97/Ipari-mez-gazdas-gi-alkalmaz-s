@@ -1,13 +1,18 @@
 package com.example.agriculturalmanagement.model.entities;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity(
         tableName = "fields",
@@ -36,14 +41,68 @@ public class Field {
 
     private int precipitationQuantity;
     private int cropType;
-    private double overcastIndex;
-    private double lightExposure;// intensity related light exposure, computing from historical overcastIndex
+    private double radiation;// intensity related light exposure, computing from historical overcastIndex
+
+    @NonNull
+    private Date creationDate;
     private double locationLongitude;
     private double locationLatitude;
 
     @NonNull
     @Embedded
     private PhysicalAddress physicalAddress;
+
+    @NonNull
+    @Embedded
+    private ComplexArea physicalGeometry;
+
+    public void fromString(String rawData) throws Exception {
+
+        String[] rawDataArr = rawData.split(":");
+        if(rawDataArr.length == 11) {
+
+            id = Integer.parseInt(rawDataArr[0]);
+            name = rawDataArr[1];
+            workHours = Duration.ofHours(Integer.parseInt(rawDataArr[2]));
+            precipitationQuantity = Integer.parseInt(rawDataArr[3]);
+            cropType = Integer.parseInt(rawDataArr[4]);
+            radiation = Double.parseDouble(rawDataArr[5]);
+            creationDate = new SimpleDateFormat().parse(rawDataArr[6]);
+            locationLongitude = Double.parseDouble(rawDataArr[7]);
+            locationLatitude = Double.parseDouble(rawDataArr[8]);
+            physicalAddress.fromString(rawDataArr[9]);
+            physicalGeometry.fromString(rawDataArr[10]);
+        }
+    }
+
+    public String toString() {
+
+        return id + ":" +
+               name + ":" +
+               workHours + ":" +
+               precipitationQuantity + ":" +
+               cropType + ":" +
+               radiation + ":" +
+               creationDate.toString() + ":" +
+               locationLongitude + ":" +
+               locationLatitude + ":" +
+               physicalAddress.toString() + ":" +
+               physicalGeometry.toString();
+    }
+
+    public Field(){
+
+        name = "";
+        workHours = Duration.ZERO;
+        precipitationQuantity = 0;
+        cropType = 0;
+        radiation  = 0.0;
+        creationDate = Calendar.getInstance().getTime();
+        locationLatitude = 0.0;
+        locationLongitude = 0.0;
+        physicalAddress = new PhysicalAddress();
+    }
+
 
     /* !@brief Constructor for existing entity creation, getting from database.
     *
@@ -52,16 +111,14 @@ public class Field {
     * @param[in] workHours Hours spent with work on the field
     * @param[in] precipitationQuantity The amount of precipitate received
     * @param[in] cropType Type of crop due to homogeneous cultivation on field
-    * @param[in] overcastIndex Overcast index for estimating crop development
-    * @param[in] lightExposure Light exposure for estimating crop development
+    * @param[in] radiaton radiation intensity of light for estimating crop development
     * @param[in] locationLongitude Horizontal POI
     * @param[in] locationLatitude Vertical POI
     * @param[in] physicalAddress Postal address including parcel address
     */
-    public Field(String name, ComplexArea area, Duration workHours, int precipitationQuantity,
-                 int cropType, double overcastIndex, double lightExposure,
-                 double locationLongitude, double locationLatitude,
-                 PhysicalAddress physicalAddress) throws Exception {
+    public Field(String name, Duration workHours, int precipitationQuantity,
+                 int cropType, double radiation, double locationLongitude, double locationLatitude,
+                 PhysicalAddress physicalAddress, ComplexArea physicalGeometry) throws Exception {
 
         id = -1;// has not been used, new entity
 
@@ -73,13 +130,15 @@ public class Field {
 
         setCropType(cropType);
 
-        setOvercastIndex(overcastIndex);
+        setRadiation(radiation);
 
-        setLightExposure(lightExposure);
+        setLocationLongitude(locationLongitude);
 
-        setLocation(locationLongitude, locationLatitude);
+        setLocationLatitude(locationLatitude);
 
         setPhysicalAddress(physicalAddress);
+
+        setPhysicalGeometry(physicalGeometry);
     }
 
     /* !@brief Constructor for existing entity creation, getting from database.
@@ -97,9 +156,8 @@ public class Field {
      * @param[in] physicalAddress Postal address including parcel address
      */
     public Field(int id, String name, Duration workHours, int precipitationQuantity,
-                 int cropType, double overcastIndex, double lightExposure,
-                 double locationLongitude, double locationLatitude,
-                 PhysicalAddress physicalAddress) {
+                 int cropType, double radiation, double locationLongitude, double locationLatitude,
+                 PhysicalAddress physicalAddress, ComplexArea physicalGeometry) {
 
         // assumption of consistent database (skipping data condition tests)
         this.id = id;
@@ -107,11 +165,11 @@ public class Field {
         this.workHours = workHours;
         this.precipitationQuantity = precipitationQuantity;
         this.cropType = cropType;
-        this.overcastIndex = overcastIndex;
-        this.lightExposure = lightExposure;
+        this.radiation = radiation;
         this.locationLongitude = locationLongitude;
         this.locationLatitude = locationLatitude;
         this.physicalAddress = physicalAddress;
+        this.physicalGeometry = physicalGeometry;
     }
 
     // GETTERS METHODS FOR MEMBERS
@@ -146,14 +204,14 @@ public class Field {
         return cropType;
     }
 
-    public double getOvercastIndex() {
+    public double getRadiation() {
 
-        return overcastIndex;
+        return radiation;
     }
 
-    public double getLightExposure() {
+    public Date getCreationDate() {
 
-        return lightExposure;
+        return creationDate;
     }
 
     public double getLocationLongitude() {
@@ -171,12 +229,22 @@ public class Field {
         return physicalAddress;
     }
 
+    public ComplexArea getPhysicalGeometry() {
+
+        return physicalGeometry;
+    }
+
     // SETTER METHODS FOR MEMBERS
 
-    public void setName(String new_name) throws Exception{
+    public void setId(int id){
 
-        if(new_name.isEmpty()) throw new Exception("New name for the field is empty.");
-        else this.name = new_name;
+        this.id = id;
+    }
+
+    public void setName(String newName) throws Exception{
+
+        if(newName.isEmpty()) throw new Exception("New name for the field is empty.");
+        else this.name = newName;
     }
 
     /* !@brief Setter that updates work hours strictly in increasing tendency, decrease can not be occurred
@@ -210,22 +278,24 @@ public class Field {
         this.cropType = cropType;
     }
 
-    public void setOvercastIndex(double overcastIndex) throws Exception{
+    public void setRadiation(double radiation) throws Exception{
 
-        if(overcastIndex < 1 && overcastIndex > 0) this.overcastIndex = overcastIndex;
-        else throw new Exception("Overcast index is out of bounds.");
+        if(radiation < 0) this.radiation = radiation;
+        else throw new Exception("Radiation is out of bounds.");
     }
 
-    public void setLightExposure(double lightExposure) throws Exception{
+    public void setCreationDate(Date creationDate){
 
-        if(lightExposure < 1 && lightExposure > 0) this.lightExposure = lightExposure;
-        else throw new Exception("Light exposure index is out of bounds.");
+        this.creationDate = creationDate;
     }
 
-    public void setLocation(double locationLongitude, double locationLatitude) throws Exception{
+    public void setLocationLongitude(double locationLongitude) throws Exception{
 
         if(locationLongitude < 180.0 && locationLongitude > -180.0) this.locationLongitude = locationLongitude;
         else throw new Exception("Location longitude is out of bounds.");
+    }
+
+    public void setLocationLatitude(double locationLatitude) throws Exception{
 
         if(locationLatitude < 90.0 && locationLatitude > -90.0) this.locationLatitude = locationLatitude;
         else throw new Exception("Location latitude is out of bounds.");
@@ -235,5 +305,11 @@ public class Field {
 
         if(physicalAddress != null) this.physicalAddress = physicalAddress;
         else throw new Exception("Physical address is null.");
+    }
+
+    public void setPhysicalGeometry(ComplexArea physicalGeometry) throws Exception {
+
+        if(physicalGeometry != null) this.physicalGeometry = physicalGeometry;
+        else throw new Exception("Physical geometry is null.");
     }
 }
